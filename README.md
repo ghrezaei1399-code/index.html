@@ -806,9 +806,9 @@
       <!-- دکمه زبان -->
 <!-- دکمه زبان فیکس شده -->
 <div class="lang-switcher" style="position:fixed; top:15px; left:15px; z-index:9999; background:#D4AF37; color:#0A2463; padding:10px 20px; border-radius:25px; border:2px solid white; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-    <a href="https://ghrezaei1399.github.io/سایت-انگلیسی-ghrezaei/" 
-       style="color:#0A2463; text-decoration:none; font-weight:bold;" 
-       target="_blank">English</a>
+   <a href="https://ghrezaei1399-code.github.io/ghrezaei-english-site/" 
+   style="color:#0A2463; text-decoration:none; font-weight:bold;" 
+   target="_blank">English</a>
 </div>
     <!-- هدر اصلی -->
     <header class="main-header">
