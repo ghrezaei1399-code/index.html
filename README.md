@@ -57,15 +57,17 @@
         }
         
         /* هدر اصلی */
-        .main-header {
-            background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
-            min-height: 50vh;
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            width: 100%;
+        /* هدر اصلی */
+.main-header {
+    background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
+    min-height: 50vh;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* ← این خط را اضافه کن */
+    width: 100%;
+}
         }
         .header-container {
             max-width: 100%;
@@ -787,9 +789,16 @@
             .nav-item { padding: 12px 16px; font-size: 0.9rem; }
             .stat-number { font-size: 2.3rem; }
             .section-title { font-size: 1.8rem; }
-            .lang-switcher { top: 15px; left: 15px; }
-            .lang-btn { padding: 6px 12px; font-size: 0.9rem; }
-        }
+            .lang-switcher { 
+        top: 10px; 
+        left: 10px; 
+        z-index: 1001; 
+    }
+    .lang-btn { 
+        padding: 6px 12px; 
+        font-size: 0.85rem; 
+        background: rgba(255, 255, 255, 0.3); 
+    }
     </style>
 </head>
 <body>
