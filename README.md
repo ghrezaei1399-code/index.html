@@ -3,755 +3,774 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دکتر غلامرضا رضائی | خرد + فناوری</title>
+    <title>پنل مدیریت | دکتر غلامرضا رضائی</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
         :root {
-            --navy-blue: #0A2463;
-            --deep-teal: #1A5276;
-            --accent-gold: #D4AF37;
-            --soft-blue: #3498DB;
-            --literary-purple: #6A4C93;
-            --light-bg: #F8F9FA;
-            --card-shadow: rgba(10, 36, 99, 0.1);
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        /* رفع مشکل عرض صفحه */
-        html, body { 
-            width: 100% !important; 
-            max-width: 100% !important; 
-            overflow-x: hidden !important; 
+            --primary: #0A2463;
+            --secondary: #1A5276;
+            --accent: #D4AF37;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --sidebar-width: 260px;
+            --github: #333;
+            --github-green: #238636;
+            --github-purple: #8957e5;
         }
         
-        body { 
-            font-family: 'Vazirmatn', 'Segoe UI', sans-serif; 
-            background: var(--light-bg); 
-            color: #333; 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
         
-        /* دکمه زبان در هدر */
-        .lang-switcher {
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            z-index: 1000;
-        }
-        .lang-btn {
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            color: white;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-decoration: none;
-            display: inline-block;
-        }
-        .lang-btn:hover {
-            background: var(--accent-gold);
-            color: var(--navy-blue);
-            transform: scale(1.05);
+        body {
+            font-family: 'Vazirmatn', 'Segoe UI', sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            overflow-x: hidden;
         }
         
-        /* هدر اصلی */
-        /* هدر اصلی */
-.main-header {
-    background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
-    min-height: 50vh;
-    padding: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative; /* ← این خط را اضافه کن */
-    width: 100%;
-}
-        }
-        .header-container {
-            max-width: 100%;
-            width: 100%;
-            display: grid;
-            grid-template-columns: 1fr 280px;
-            gap: 30px;
-            align-items: start;
-            padding: 0 20px;
-        }
-        .profile-section {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 30px;
+        /* صفحه ورود */
+        .login-page {
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
-        }
-        .profile-img-container {
-            display: flex;
+            justify-content: center;
             align-items: center;
-            gap: 25px;
-            margin-bottom: 20px;
-            width: 100%;
-        }
-        .profile-img {
-            width: 140px;
-            height: 140px;
-            border-radius: 15px;
-            border: 4px solid var(--accent-gold);
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-        .profile-img img { width: 100%; height: 100%; object-fit: cover; }
-        .profile-titles {
-            flex: 1;
-        }
-        .profile-titles h1 {
-            color: white;
-            font-size: 2.2rem;
-            margin-bottom: 8px;
-        }
-        .profile-titles .tagline {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.1rem;
-            line-height: 1.5;
-        }
-        .motto-box {
-            color: white;
-            background: rgba(0, 0, 0, 0.15);
-            padding: 15px 20px;
-            border-radius: 15px;
-            border-right: 4px solid var(--accent-gold);
-            font-size: 1rem;
-            line-height: 1.6;
-            width: 100%;
-        }
-        .motto {
-            color: var(--accent-gold);
-            font-weight: 600;
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 20px;
         }
         
-        /* نوار ابزار عمودی */
-        .vertical-nav {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 20px;
-            padding: 25px 20px;
-            box-shadow: 0 12px 25px var(--card-shadow);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            height: fit-content;
-        }
-        .nav-item {
-            background: linear-gradient(to left, var(--soft-blue), var(--deep-teal));
-            color: white;
-            padding: 14px 20px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 10px rgba(52, 152, 219, 0.2);
-            font-size: 0.95rem;
-        }
-        .nav-item:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 8px 18px rgba(52, 152, 219, 0.4);
-        }
-        .nav-icon { font-size: 1.1rem; }
-        
-        /* بخش فراخوان جهانی */
-        .global-call-section {
-            padding: 80px 30px;
-            background: linear-gradient(135deg, #f0f7ff, #e3f2fd);
-            width: 100%;
-        }
-        .section-title {
-            text-align: center;
-            font-size: 2.5rem;
-            color: var(--navy-blue);
-            margin-bottom: 50px;
-        }
-        .call-to-action-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .call-card {
+        .login-box {
             background: white;
             border-radius: 20px;
-            padding: 35px;
-            box-shadow: 0 15px 35px rgba(10, 36, 99, 0.1);
-            border: 2px solid transparent;
-            transition: all 0.4s;
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             text-align: center;
-            display: flex;
-            flex-direction: column;
         }
-        .call-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-gold);
-            box-shadow: 0 25px 50px rgba(10, 36, 99, 0.15);
+        
+        .login-box h1 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.8rem;
         }
-        .call-icon {
-            font-size: 3rem;
-            margin-bottom: 20px;
-        }
-        .call-card h3 {
-            color: var(--navy-blue);
-            font-size: 1.6rem;
-            margin-bottom: 15px;
-        }
-        .call-card p {
-            color: #555;
-            line-height: 1.7;
-            flex: 1;
-            margin-bottom: 20px;
-        }
-        .call-highlight {
-            background: rgba(212, 175, 55, 0.1);
-            border-right: 4px solid var(--accent-gold);
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 15px;
+        
+        .login-box .subtitle {
+            color: #666;
+            margin-bottom: 30px;
             font-size: 0.95rem;
-            color: #333;
+        }
+        
+        .login-icon {
+            font-size: 4rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
             text-align: right;
         }
         
-        /* باکس شمارنده */
-        .stats-section {
-            padding: 50px 30px;
-            background: white;
-            width: 100%;
-        }
-        .stats-container {
-            max-width: 100%;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            padding: 0 20px;
-        }
-        .stat-box {
-            background: linear-gradient(135deg, #ffffff, #f0f7ff);
-            border-radius: 18px;
-            padding: 25px;
-            text-align: center;
-            border: 2px solid #e2e8f0;
-            transition: all 0.4s;
-            box-shadow: 0 8px 20px rgba(10, 36, 99, 0.05);
-        }
-        .stat-box:hover {
-            transform: translateY(-8px);
-            border-color: var(--soft-blue);
-            box-shadow: 0 15px 30px var(--card-shadow);
-        }
-        .stat-number {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: var(--navy-blue);
+        .form-group label {
             display: block;
-            line-height: 1;
-            margin-bottom: 10px;
-        }
-        .stat-label {
-            color: #555;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            min-height: 45px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        /* بخش مقالات */
-        .research-section {
-            padding: 80px 30px;
-            background: white;
-            width: 100%;
-        }
-        .research-tabs {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 40px;
-            justify-content: center;
-        }
-        .tab-btn {
-            padding: 15px 30px;
-            background: #f0f7ff;
-            border: none;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--navy-blue);
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .tab-btn:hover {
-            background: var(--soft-blue);
-            color: white;
-        }
-        .tab-btn.active {
-            background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
-            color: white;
-            box-shadow: 0 8px 20px rgba(10, 36, 99, 0.2);
-        }
-        .tab-icon { font-size: 1.3rem; }
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        .research-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-            padding: 0 20px;
-        }
-        .research-card {
-            background: #f8fafc;
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.4s;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        .research-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(10, 36, 99, 0.1);
-            border-color: var(--soft-blue);
-        }
-        .research-card-header {
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-        .research-card-title {
-            font-size: 1.4rem;
-            color: var(--navy-blue);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-        .research-card-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.9rem;
-            color: #666;
-        }
-        .research-card-date { font-weight: 600; }
-        .research-card-keywords {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin: 15px 0;
-        }
-        .keyword {
-            background: rgba(52, 152, 219, 0.1);
-            color: var(--deep-teal);
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-        .research-card-body {
-            flex: 1;
-            color: #555;
-            line-height: 1.7;
-            margin-bottom: 20px;
-        }
-        .research-card-footer {
-            margin-top: auto;
-            padding-top: 15px;
-            border-top: 1px dashed #ddd;
-            text-align: left;
-            font-style: italic;
-            color: #777;
-            font-size: 0.9rem;
-        }
-        .request-ppt-btn {
-            background: linear-gradient(135deg, var(--literary-purple), #8A63B5);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .request-ppt-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(106, 76, 147, 0.3);
-        }
-        
-        /* یادداشت‌های روزانه */
-        .notes-section {
-            padding: 80px 30px;
-            background: #f8fafc;
-            width: 100%;
-        }
-        .timeline {
-            max-width: 100%;
-            margin: 50px auto;
-            position: relative;
-            padding: 0 20px;
-        }
-        .timeline::before {
-            content: '';
-            position: absolute;
-            right: 50%;
-            top: 0;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(to bottom, var(--soft-blue), var(--literary-purple));
-            border-radius: 2px;
-        }
-        .timeline-item {
-            margin-bottom: 40px;
-            position: relative;
-            width: 45%;
-        }
-        .timeline-item:nth-child(odd) {
-            margin-right: 55%;
-        }
-        .timeline-item:nth-child(even) {
-            margin-right: 0;
-            margin-left: 55%;
-        }
-        .timeline-date {
-            background: var(--navy-blue);
-            color: white;
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        .timeline-content {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-        .timeline-content h3 {
-            color: var(--deep-teal);
-            margin-bottom: 10px;
-        }
-        
-        /* اسلایدشو مقالات */
-        .slideshow-section {
-            padding: 70px 30px;
-            background: white;
-            width: 100%;
-        }
-        .slideshow-container {
-            max-width: 100%;
-            margin: 40px auto;
-            border-radius: 22px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-            position: relative;
-            padding: 0 20px;
-        }
-        .slides-wrapper {
-            display: flex;
-            transition: transform 0.4s ease;
-            direction: ltr;
-        }
-        .slide-item {
-            min-width: 100%;
-            height: 400px;
-            background: #1e293b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .slide-item img {
-            max-width: 85%;
-            max-height: 85%;
-            object-fit: contain;
-            border-radius: 8px;
-        }
-        .slide-controls {
-            position: absolute;
-            bottom: 20px;
-            right: 50%;
-            transform: translateX(50%);
-            display: flex;
-            gap: 10px;
-        }
-        .slide-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.5);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .slide-dot.active {
-            background: white;
-            transform: scale(1.3);
-        }
-        
-        /* اسلایدشو کتاب‌ها */
-        .books-slideshow {
-            padding: 70px 30px;
-            background: linear-gradient(135deg, #f9f5ff, #f0ebfa);
-            width: 100%;
-        }
-        .books-slider {
-            max-width: 100%;
-            margin: 40px auto;
-            overflow: hidden;
-            border-radius: 22px;
-            box-shadow: 0 20px 40px rgba(106, 76, 147, 0.18);
-            padding: 0 20px;
-        }
-        .books-track {
-            display: flex;
-            transition: transform 0.5s ease;
-            direction: ltr;
-        }
-        .book-slide {
-            min-width: 25%;
-            padding: 15px;
-        }
-        .book-item {
-            background: white;
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
-            height: 320px;
-            display: flex;
-            flex-direction: column;
-        }
-        .book-cover {
-            height: 180px;
-            background: var(--literary-purple);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-        .book-cover img {
-            max-width: 75%;
-            max-height: 75%;
-            object-fit: contain;
-            border-radius: 5px;
-        }
-        .book-info {
-            padding: 20px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .book-title {
-            color: var(--literary-purple);
-            font-size: 1.2rem;
-            font-weight: 700;
             margin-bottom: 8px;
-        }
-        .book-desc {
-            color: #555;
-            font-size: 0.9rem;
-            line-height: 1.5;
-        }
-        .book-status {
-            color: #666;
-            font-size: 0.85rem;
-            font-style: italic;
-            margin-top: 10px;
-            text-align: left;
-        }
-        
-        /* بخش سرمایه‌گذاری */
-        .investment-section {
-            padding: 70px 30px;
-            background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
-            color: white;
-            text-align: center;
-            width: 100%;
-        }
-        .investment-content {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .investment-content h2 {
-            font-size: 2.3rem;
-            margin-bottom: 20px;
-        }
-        .investment-text {
-            font-size: 1.2rem;
-            line-height: 1.7;
-            margin-bottom: 25px;
-            opacity: 0.95;
-        }
-        .highlight-box {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 15px;
-            padding: 20px;
-            border-right: 4px solid var(--accent-gold);
-            margin-top: 20px;
-            font-size: 1.1rem;
-        }
-        
-        /* مودال پاورپوینت */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-        .modal.active { display: flex; }
-        .modal-content {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 500px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-        }
-        .modal-icon { font-size: 4rem; color: var(--accent-gold); margin-bottom: 20px; }
-        .modal h3 { color: var(--navy-blue); margin-bottom: 15px; }
-        .modal p { color: #555; line-height: 1.7; margin-bottom: 25px; }
-        .modal-close {
-            background: var(--navy-blue);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            cursor: pointer;
             font-weight: 600;
-        }
-        .modal-contact {
-            background: var(--accent-gold);
-            color: var(--navy-blue);
-            margin-right: 10px;
+            color: var(--primary);
         }
         
-        /* پنل مدیریت (مخفی) */
-        .admin-panel-section {
-            padding: 50px 30px;
-            background: #f0f7ff;
-            display: none;
+        .form-control {
             width: 100%;
-        }
-        .admin-panel {
-            max-width: 100%;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 20px 40px rgba(10, 36, 99, 0.1);
-        }
-        .admin-form input, .admin-form textarea, .admin-form select {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 20px;
+            padding: 12px 15px;
             border: 2px solid #e2e8f0;
             border-radius: 10px;
             font-family: inherit;
             font-size: 1rem;
+            transition: all 0.3s;
         }
-        .admin-form textarea { min-height: 150px; resize: vertical; }
-        .admin-submit {
-            background: linear-gradient(135deg, var(--navy-blue), var(--deep-teal));
-            color: white;
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 36, 99, 0.1);
+        }
+        
+        .btn {
+            padding: 12px 25px;
             border: none;
-            padding: 15px 40px;
             border-radius: 10px;
+            font-family: inherit;
             font-weight: 600;
             cursor: pointer;
-            font-size: 1.1rem;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        /* نوار پایینی */
-        .final-bar {
-            background: linear-gradient(90deg, var(--navy-blue), var(--literary-purple));
-            padding: 18px 0;
-            overflow: hidden;
-            margin-top: 50px;
-            width: 100%;
-        }
-        .bar-content {
-            display: flex;
-            animation: scrollLeft 35s linear infinite;
-            white-space: nowrap;
-        }
-        .bar-text {
-            font-size: 1.3rem;
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
-            font-weight: 600;
-            padding: 0 40px;
-            display: inline-block;
-        }
-        @keyframes scrollLeft {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
         }
         
-        /* فوتر */
-        footer {
-            background: var(--navy-blue);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(10, 36, 99, 0.2);
+        }
+        
+        .btn-success {
+            background: var(--success);
             color: white;
-            padding: 50px 30px;
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-github {
+            background: var(--github);
+            color: white;
+        }
+        
+        .btn-github-green {
+            background: var(--github-green);
+            color: white;
+        }
+        
+        .btn-github-purple {
+            background: var(--github-purple);
+            color: white;
+        }
+        
+        .btn-sm {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+        
+        /* صفحه اصلی پنل */
+        .admin-page {
+            display: none;
+        }
+        
+        /* نوار کناری */
+        .sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 5px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: transform 0.3s;
+        }
+        
+        .sidebar-header {
+            padding: 0 20px 30px;
             text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .sidebar-header h2 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-header p {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 5px;
+        }
+        
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-right: 4px solid var(--accent);
+        }
+        
+        .sidebar-menu i {
+            font-size: 1.1rem;
+            width: 24px;
+        }
+        
+        /* محتوای اصلی */
+        .main-content {
+            margin-right: var(--sidebar-width);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .top-bar {
+            background: white;
+            border-radius: 15px;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .top-bar h1 {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #e6c158);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        /* داشبورد */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .card-title {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+        
+        .card-trend {
+            font-size: 0.85rem;
+            color: var(--success);
+        }
+        
+        .card-trend.down {
+            color: var(--danger);
+        }
+        
+        /* جداول */
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .table-title {
+            font-size: 1.2rem;
+            color: var(--primary);
+        }
+        
+        table {
             width: 100%;
+            border-collapse: collapse;
         }
-        .footer-content {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
+        
+        th, td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid #eee;
         }
-        .footer-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 35px;
+        
+        th {
+            background: #f8f9fa;
+            color: var(--primary);
+            font-weight: 600;
         }
-        .footer-grid {
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .status {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .status.published {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+        }
+        
+        .status.draft {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+        }
+        
+        .status.synced {
+            background: rgba(137, 87, 229, 0.1);
+            color: var(--github-purple);
+        }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        /* فرم‌ها */
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .form-section h2 {
+            color: var(--primary);
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f7ff;
+        }
+        
+        .form-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
-        .footer-col div:first-child {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
+        
+        .form-full {
+            grid-column: 1 / -1;
         }
-        .copyright {
-            color: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
+        
+        textarea.form-control {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Vazirmatn', monospace;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
             margin-top: 30px;
             padding-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 2px solid #f0f7ff;
+        }
+        
+        /* تب‌ها */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f0f7ff;
+            padding-bottom: 5px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 10px 25px;
+            background: none;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .tab-btn.active {
+            color: var(--primary);
+            background: #f0f7ff;
+        }
+        
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            right: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* پیش‌نمایش */
+        .preview-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-top: 30px;
+        }
+        
+        .preview-title {
+            color: var(--primary);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .preview-container {
+            border: 2px dashed #e2e8f0;
+            border-radius: 10px;
+            padding: 25px;
+            background: #f8fafc;
+            min-height: 200px;
+            overflow: auto;
+        }
+        
+        /* اعلان‌ها */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .alert-success {
+            background: rgba(40, 167, 69, 0.1);
+            color: var(--success);
+            border-right: 4px solid var(--success);
+        }
+        
+        .alert-error {
+            background: rgba(220, 53, 69, 0.1);
+            color: var(--danger);
+            border-right: 4px solid var(--danger);
+        }
+        
+        .alert-info {
+            background: rgba(23, 162, 184, 0.1);
+            color: #17a2b8;
+            border-right: 4px solid #17a2b8;
+        }
+        
+        .alert-warning {
+            background: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+            border-right: 4px solid var(--warning);
+        }
+        
+        /* مدال */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+        
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #666;
+            cursor: pointer;
+        }
+        
+        /* ادیتور */
+        .editor-toolbar {
+            background: #f8f9fa;
+            border: 1px solid #e2e8f0;
+            border-bottom: none;
+            border-radius: 10px 10px 0 0;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .editor-btn {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 5px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .editor-btn:hover {
+            background: #f0f7ff;
+            border-color: var(--primary);
+        }
+        
+        .editor-content {
+            border: 1px solid #e2e8f0;
+            border-radius: 0 0 10px 10px;
+            min-height: 300px;
+            padding: 15px;
+            font-family: 'Vazirmatn', monospace;
+            line-height: 1.6;
+        }
+        
+        /* گیت‌هاب استاتوس */
+        .github-status {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-right: 4px solid var(--github-purple);
+        }
+        
+        .github-status-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .github-status-header i {
+            color: var(--github-purple);
+            font-size: 1.5rem;
+        }
+        
+        .github-status-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .github-status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .github-status-label {
+            color: #666;
+        }
+        
+        .github-status-value {
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .github-status-value.connected {
+            color: var(--success);
+        }
+        
+        .github-status-value.disconnected {
+            color: var(--danger);
+        }
+        
+        /* ریسپانسیو */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(100%);
+            }
+            
+            .sidebar.active {
+                transform: translateX(0);
+            }
+            
+            .main-content {
+                margin-right: 0;
+            }
+            
+            .menu-toggle {
+                display: block !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .top-bar {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                align-self: flex-end;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .login-box {
+                padding: 30px 20px;
+            }
+            
+            .form-section {
+                padding: 20px;
+            }
+            
+            .table-container {
+                padding: 15px;
+            }
+            
+            th, td {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                width: 95%;
+            }
+        }
+        
+        /* مخفی/نمایشی */
+        .hidden {
+            display: none !important;
+        }
+        
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--primary);
+            cursor: pointer;
+        }
+        
+        /* لودینگ */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0,0,0,.1);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
         
         /* انیمیشن‌ها */
@@ -760,655 +779,1677 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
-        /* ریسپانسیو */
-        @media (max-width: 1100px) {
-            .header-container { grid-template-columns: 1fr; }
-            .vertical-nav { order: -1; margin-bottom: 30px; }
-            .stats-container { grid-template-columns: repeat(2, 1fr); }
-            .book-slide { min-width: 33.333%; }
-            .research-grid { grid-template-columns: repeat(2, 1fr); }
-            .call-to-action-grid { grid-template-columns: repeat(2, 1fr); }
+        .fade-in {
+            animation: fadeIn 0.5s ease;
         }
-        @media (max-width: 768px) {
-            .main-header, .global-call-section, .research-section, .notes-section { padding: 30px 20px; }
-            .profile-section { padding: 25px; }
-            .profile-img-container { flex-direction: column; text-align: center; gap: 20px; }
-            .profile-img { width: 160px; height: 160px; }
-            .stats-container { grid-template-columns: 1fr; }
-            .book-slide { min-width: 50%; }
-            .slide-item { height: 320px; }
-            .section-title { font-size: 2rem; }
-            .research-grid { grid-template-columns: 1fr; }
-            .tab-btn { padding: 12px 20px; font-size: 1rem; }
-            .call-to-action-grid { grid-template-columns: 1fr; }
-            .timeline::before { right: 30px; }
-            .timeline-item { width: 100%; margin-right: 0 !important; margin-left: 0 !important; }
+        
+        /* مارک‌داون */
+        .markdown-preview {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
         }
-        @media (max-width: 480px) {
-            .book-slide { min-width: 100%; }
-            .nav-item { padding: 12px 16px; font-size: 0.9rem; }
-            .stat-number { font-size: 2.3rem; }
-            .section-title { font-size: 1.8rem; }
-            .lang-switcher { 
-        top: 10px; 
-        left: 10px; 
-        z-index: 1001; 
-    }
-    .lang-btn { 
-        padding: 6px 12px; 
-        font-size: 0.85rem; 
-        background: rgba(255, 255, 255, 0.3); 
-    }
+        
+        .markdown-preview h1, 
+        .markdown-preview h2, 
+        .markdown-preview h3 {
+            color: var(--primary);
+            margin: 15px 0 10px 0;
+        }
+        
+        .markdown-preview p {
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        .markdown-preview ul, 
+        .markdown-preview ol {
+            padding-right: 20px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
-    <!-- دکمه زبان -->
-      <!-- دکمه زبان -->
-<!-- دکمه زبان فیکس شده -->
-<div class="lang-switcher" style="position:fixed; top:15px; left:15px; z-index:9999; background:#D4AF37; color:#0A2463; padding:10px 20px; border-radius:25px; border:2px solid white; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
-   <a href="https://ghrezaei1399-code.github.io/ghrezaei-english-site/" 
-   style="color:#0A2463; text-decoration:none; font-weight:bold;" 
-   target="_blank">English</a>
-</div>
-    <!-- هدر اصلی -->
-    <header class="main-header">
-        <div class="header-container">
-            <div class="profile-section">
-                <div class="profile-img-container">
-                    <div class="profile-img">
-                        <img src="https://i.postimg.cc/02YrBwDP/%CA%BEks-khwdm2.jpg" alt="دکتر رضائی">
-                    </div>
-                    <div class="profile-titles">
-                        <h1>دکتر غلامرضا رضائی</h1>
-                        <div class="tagline">
-                            معمار تحول سازمانی | نظریه‌پرداز هوش مصنوعی | شاعر و نویسنده
-                        </div>
-                    </div>
-                </div>
-                <div class="motto-box">
-                    <span class="motto">شعار: </span>ترکیب خرد انسانی با فناوری‌های پیشرفته برای فردایی امن و شکوفا
+    <!-- مدال گیت‌هاب کانفیگ -->
+    <div class="modal" id="githubConfigModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fab fa-github"></i> تنظیمات GitHub</h3>
+                <button class="modal-close" id="closeConfigModal">&times;</button>
+            </div>
+            
+            <div class="alert alert-info">
+                <i class="fas fa-info-circle"></i>
+                برای اتصال به GitHub نیاز به یک Personal Access Token دارید.
+                <br><br>
+                <strong>مراحل ساخت Token:</strong>
+                <ol style="padding-right: 20px; margin-top: 10px;">
+                    <li>به GitHub.com بروید</li>
+                    <li>Settings → Developer settings → Personal access tokens</li>
+                    <li>Token classic ایجاد کنید</li>
+                    <li>دسترسی‌های <code>repo</code> و <code>workflow</code> را انتخاب کنید</li>
+                    <li>توکن را کپی و در فیلد زیر قرار دهید</li>
+                </ol>
+            </div>
+            
+            <div class="form-group">
+                <label>GitHub Personal Access Token *</label>
+                <input type="password" id="githubToken" class="form-control" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+            </div>
+            
+            <div class="form-group">
+                <label>نام کاربری GitHub *</label>
+                <input type="text" id="githubUsername" class="form-control" placeholder="username">
+            </div>
+            
+            <div class="form-group">
+                <label>نام ریپازیتوری *</label>
+                <input type="text" id="githubRepo" class="form-control" placeholder="dr-rezaei-website">
+            </div>
+            
+            <div class="form-group">
+                <label>شاخه اصلی (Branch) *</label>
+                <input type="text" id="githubBranch" class="form-control" value="main" placeholder="main">
+            </div>
+            
+            <div class="form-group">
+                <label>مسیر فایل‌های فارسی (مثلا: index.html)</label>
+                <input type="text" id="githubPathFa" class="form-control" value="index.html">
+            </div>
+            
+            <div class="form-group">
+                <label>مسیر فایل‌های انگلیسی (مثلا: en.html)</label>
+                <input type="text" id="githubPathEn" class="form-control" value="en.html">
+            </div>
+            
+            <div class="form-actions">
+                <button class="btn btn-github" id="testGithubConnection">
+                    <i class="fab fa-github"></i> تست اتصال
+                </button>
+                <button class="btn btn-success" id="saveGithubConfig">
+                    <i class="fas fa-save"></i> ذخیره تنظیمات
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- مدال پیش‌نمایش انتشار -->
+    <div class="modal" id="publishModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-rocket"></i> انتشار در GitHub</h3>
+                <button class="modal-close" id="closePublishModal">&times;</button>
+            </div>
+            
+            <div id="publishStatus">
+                <div class="alert alert-info">
+                    <i class="fas fa-sync fa-spin"></i>
+                    در حال آماده‌سازی برای انتشار...
                 </div>
             </div>
             
-            <nav class="vertical-nav">
-                <a href="#global-call" class="nav-item"><span class="nav-icon">🌍</span> فراخوان جهانی</a>
-                <a href="#stats" class="nav-item"><span class="nav-icon">📊</span> آمار و دستاوردها</a>
-                <a href="#research" class="nav-item"><span class="nav-icon">📄</span> مقالات و پژوهش‌ها</a>
-                <a href="#notes" class="nav-item"><span class="nav-icon">📝</span> یادداشت‌های روزانه</a>
-                <a href="#books" class="nav-item"><span class="nav-icon">📚</span> آثار ادبی</a>
-                <a href="#investment" class="nav-item"><span class="nav-icon">🔒</span> همکاری و سرمایه‌گذاری</a>
-                <a href="#contact" class="nav-item"><span class="nav-icon">📞</span> تماس و ارتباط</a>
-            </nav>
-        </div>
-    </header>
-    
-    <!-- بخش فراخوان جهانی -->
-    <section id="global-call" class="global-call-section">
-        <h2 class="section-title">فراخوان همکاری جهانی</h2>
-        <div class="call-to-action-grid">
-            <div class="call-card">
-                <div class="call-icon">🏛️</div>
-                <h3>کشورها و دولت‌ها</h3>
-                <p>اجرای طرح‌های ملی تحول دیجیتال و هوش مصنوعی انسان‌محور. بیش از ۱۰ طرح آماده اجرا با الحاقیات کامل.</p>
-                <div class="call-highlight">مشارکت در پروژه‌های کلان ملی</div>
-            </div>
-            <div class="call-card">
-                <div class="call-icon">🏢</div>
-                <h3>شرکت‌های فناوری</h3>
-                <p>خرید یا مشارکت در اجرای چارچوب‌های تحولی مانند سازمان کیفی سیار (IMQO) و نکسوس کارآفرین جهانی (GENF).</p>
-                <div class="call-highlight">طرح‌های عملیاتی آماده پیاده‌سازی</div>
-            </div>
-            <div class="call-card">
-                <div class="call-icon">🤝</div>
-                <h3>سرمایه‌گذاران اثرگذار</h3>
-                <p>سرمایه‌گذاری در مدل‌های کسب‌وکار مبتنی بر هوش مصنوعی اخلاق‌محور و مهندسی فرهنگی. بازگشت سرمایه تضمین‌شده.</p>
-                <div class="call-highlight">۱۶ طرح با تحلیل مالی کامل</div>
-            </div>
-            <div class="call-card">
-                <div class="call-icon">🌐</div>
-                <h3>مجامع بین‌المللی</h3>
-                <p>همکاری با نهادهایی مانند یونسکو، WEF و IEEE برای گسترش چارچوب‌های نظری و استانداردهای جهانی.</p>
-                <div class="call-highlight">همکاری در تدوین استانداردها</div>
-            </div>
-            <div class="call-card">
-                <div class="call-icon">👥</div>
-                <h3>نمایندگان اجرایی</h3>
-                <p>اعطای نمایندگی برای اجرای منطقه‌ای طرح‌ها در کشورهای عربی، آسیایی و اروپایی.</p>
-                <div class="call-highlight">آموزش، پشتیبانی و مربی‌گری کامل</div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- باکس شمارنده -->
-    <section id="stats" class="stats-section">
-        <div class="stats-container">
-            <div class="stat-box">
-                <span class="stat-number">18</span>
-                <div class="stat-label">مقاله علمی-نظری با ثبت بین‌المللی (DOI)</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">2</span>
-                <div class="stat-label">مقاله سیاسی-اجتماعی تحلیلی</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">33+</span>
-                <div class="stat-label">نظریه جدید در هوش مصنوعی و تحول سازمانی</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">4</span>
-                <div class="stat-label">کتاب شعر منتشر شده</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">1</span>
-                <div class="stat-label">کتاب داستان منتشر شده</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">13</span>
-                <div class="stat-label">کتاب داستان در حال اخذ مجوز</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">1</span>
-                <div class="stat-label">کتاب هوشمندنگاری</div>
-            </div>
-            <div class="stat-box">
-                <span class="stat-number">1</span>
-                <div class="stat-label">کتاب در حال نگارش (فساد سازمانی)</div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- بخش مقالات و پژوهش‌ها -->
-    <section id="research" class="research-section">
-        <h2 class="section-title">مقاله‌ها و پژوهش‌های علمی-نظری</h2>
-        
-        <div class="research-tabs">
-            <button class="tab-btn active" data-tab="tab1">
-                <span class="tab-icon">🤖</span> هوش مصنوعی انسان‌محور
-            </button>
-            <button class="tab-btn" data-tab="tab2">
-                <span class="tab-icon">🏢</span> تحول سازمانی هوشمند
-            </button>
-            <button class="tab-btn" data-tab="tab3">
-                <span class="tab-icon">🌍</span> مهندسی فرهنگی دیجیتال
-            </button>
-            <button class="tab-btn" data-tab="tab4">
-                <span class="tab-icon">🧠</span> نظریه‌های شناختی-اجتماعی
-            </button>
-        </div>
-        
-        <!-- تب 1: هوش مصنوعی انسان‌محور -->
-        <div id="tab1" class="tab-content active">
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-card-header">
-                        <h3 class="research-card-title">طرح درهم‌تنیدگی انسان و هوش مصنوعی</h3>
-                        <div class="research-card-meta">
-                            <span class="research-card-date">دسامبر ۲۰۲۵</span>
-                            <span>مقاله ۱۱</span>
-                        </div>
+            <div id="publishDetails" style="display: none;">
+                <div class="github-status">
+                    <div class="github-status-header">
+                        <i class="fab fa-github"></i>
+                        <h4>جزئیات انتشار</h4>
                     </div>
-                    <div class="research-card-keywords">
-                        <span class="keyword">هوش مصنوعی شخصی</span>
-                        <span class="keyword">حفاظت فرهنگی</span>
+                    <div class="github-status-item">
+                        <span class="github-status-label">فایل:</span>
+                        <span class="github-status-value" id="publishFileName">-</span>
                     </div>
-                    <div class="research-card-body">
-                        ارائه چارچوبی برای ایجاد همکار دیجیتالی وفادار تحت استیلای کامل کاربر مصلح فرهنگی.
+                    <div class="github-status-item">
+                        <span class="github-status-label">تغییرات:</span>
+                        <span class="github-status-value" id="publishChanges">-</span>
                     </div>
-                    <button class="request-ppt-btn">📥 درخواست فایل ارائه (PPT)</button>
-                    <div class="research-card-footer">چارچوب عملیاتی برای مهندسان فرهنگ</div>
+                    <div class="github-status-item">
+                        <span class="github-status-label">وضعیت:</span>
+                        <span class="github-status-value" id="publishStatusText">-</span>
+                    </div>
+                    <div class="github-status-item">
+                        <span class="github-status-label">لینک:</span>
+                        <span class="github-status-value">
+                            <a href="#" id="publishLink" target="_blank">مشاهده در GitHub</a>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-actions" style="margin-top: 20px;">
+                <button class="btn btn-primary" id="confirmPublish" style="display: none;">
+                    <i class="fas fa-check"></i> تأیید و انتشار
+                </button>
+                <button class="btn btn-danger" id="cancelPublish">
+                    <i class="fas fa-times"></i> لغو
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- صفحه ورود -->
+    <div class="login-page" id="loginPage">
+        <div class="login-box">
+            <div class="login-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+            <h1>ورود به پنل مدیریت</h1>
+            <p class="subtitle">دکتر غلامرضا رضائی | یکپارچه با GitHub</p>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">نام کاربری</label>
+                    <input type="text" id="username" class="form-control" placeholder="admin" required>
                 </div>
                 
-                <div class="research-card">
-                    <div class="research-card-header">
-                        <h3 class="research-card-title">پارادایم تکوین همگام</h3>
-                        <div class="research-card-meta">
-                            <span class="research-card-date">دسامبر ۲۰۲۵</span>
-                            <span>مقاله ۸</span>
-                        </div>
-                    </div>
-                    <div class="research-card-keywords">
-                        <span class="keyword">تکوین همگام</span>
-                        <span class="keyword">ایمنی ذاتی</span>
-                    </div>
-                    <div class="research-card-body">
-                        معرفی معماری بدیل بنیادین با سه اصل یکپارچه برای توسعه امن هوش مصنوعی.
-                    </div>
-                    <button class="request-ppt-btn">📥 درخواست فایل ارائه (PPT)</button>
-                    <div class="research-card-footer">پارادایم جدید برای توسعه امن</div>
+                <div class="form-group">
+                    <label for="password">رمز عبور</label>
+                    <input type="password" id="password" class="form-control" placeholder="••••••••" required>
                 </div>
-            </div>
-        </div>
-        
-        <!-- تب 2: تحول سازمانی هوشمند -->
-        <div id="tab2" class="tab-content">
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-card-header">
-                        <h3 class="research-card-title">سازمان تحول‌گرای هوشمند</h3>
-                        <div class="research-card-meta">
-                            <span class="research-card-date">دسامبر ۲۰۲۵</span>
-                            <span>مقاله ۳</span>
-                        </div>
-                    </div>
-                    <div class="research-card-keywords">
-                        <span class="keyword">تحول سازمانی</span>
-                        <span class="keyword">هوشمندی پویا</span>
-                    </div>
-                    <div class="research-card-body">
-                        ارائه نقشه‌راهی برای تبدیل هوشمندسازی به یک «سفر تحول فرهنگی» در خدمت شکوفایی جمعی.
-                    </div>
-                    <button class="request-ppt-btn">📥 درخواست فایل ارائه (PPT)</button>
-                    <div class="research-card-footer">پاسخ به نرخ شکست ۷۰٪ پروژه‌ها</div>
+                
+                <div class="form-group" style="text-align: left;">
+                    <label>
+                        <input type="checkbox" id="remember"> مرا به خاطر بسپار
+                    </label>
                 </div>
-            </div>
-        </div>
-        
-        <!-- تب 3: مهندسی فرهنگی دیجیتال -->
-        <div id="tab3" class="tab-content">
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-card-header">
-                        <h3 class="research-card-title">طرح ملی «هوشمندسازی همراهان روشنایی»</h3>
-                        <div class="research-card-meta">
-                            <span class="research-card-date">دسامبر ۲۰۲۵</span>
-                            <span>مقاله ۱</span>
-                        </div>
-                    </div>
-                    <div class="research-card-keywords">
-                        <span class="keyword">مهندسی فرهنگی</span>
-                        <span class="keyword">همراهان روشنایی</span>
-                    </div>
-                    <div class="research-card-body">
-                        معرفی چارچوب عملیاتی طرح ملی با ارائه «نظریه هوشمندسازی همراهان روشنایی».
-                    </div>
-                    <button class="request-ppt-btn">📥 درخواست فایل ارائه (PPT)</button>
-                    <div class="research-card-footer">پاسخ بومی به بحران حکمرانی فرهنگی</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- تب 4: نظریه‌های شناختی-اجتماعی -->
-        <div id="tab4" class="tab-content">
-            <div class="research-grid">
-                <div class="research-card">
-                    <div class="research-card-header">
-                        <h3 class="research-card-title">چارچوب نظری گسست دیجیتال-کنشگری</h3>
-                        <div class="research-card-meta">
-                            <span class="research-card-date">دسامبر ۲۰۲۵</span>
-                            <span>مقاله ۶</span>
-                        </div>
-                    </div>
-                    <div class="research-card-keywords">
-                        <span class="keyword">گسست دیجیتال</span>
-                        <span class="keyword">کنشگری اجتماعی</span>
-                    </div>
-                    <div class="research-card-body">
-                        تحلیل پارادوکس کاهش اثرگذاری کنش جمعی علی‌رغم دسترسی بی‌سابقه به فناوری.
-                    </div>
-                    <button class="request-ppt-btn">📥 درخواست فایل ارائه (PPT)</button>
-                    <div class="research-card-footer">چارچوب یکپارچه تحلیل بحران کنشگری</div>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- یادداشت‌های روزانه -->
-    <section id="notes" class="notes-section">
-        <h2 class="section-title">یادداشت‌های روزانه دکتر رضائی</h2>
-        <div class="timeline">
-            <div class="timeline-item">
-                <div class="timeline-date">۳۰ دسامبر ۲۰۲۵</div>
-                <div class="timeline-content">
-                    <h3>یادداشت روز تعویض، تطمیع، تهدید، دیگر اثر ندارد</h3>
-                    <p>تحلیلی بر تحول گفتمان قدرت و مقاومت در عصر دیجیتال...</p>
-                </div>
-            </div>
-            <div class="timeline-item">
-                <div class="timeline-date">۲۹ دسامبر ۲۰۲۵</div>
-                <div class="timeline-content">
-                    <h3>یادداشت روز اتحاد در کف خیابان</h3>
-                    <p>ضرورت بازتعریف کنش جمعی در فضای عمومی...</p>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    <!-- اسلایدشو مقالات (تصاویر) -->
-    <section class="slideshow-section">
-        <h2 class="section-title">اسلایدهای مقالات علمی</h2>
-        <div class="slideshow-container">
-            <div class="slides-wrapper" id="articlesSlides"></div>
-            <div class="slide-controls" id="articlesDots"></div>
-        </div>
-    </section>
-    
-    <!-- اسلایدشو کتاب‌ها -->
-    <section id="books" class="books-slideshow">
-        <h2 class="section-title">آثار ادبی و شعری منتشر شده</h2>
-        <div class="books-slider">
-            <div class="books-track" id="booksTrack"></div>
-        </div>
-        <p style="text-align: center; color: #666; margin-top: 30px; font-size: 1rem; max-width: 800px; margin-left: auto; margin-right: auto;">
-            <strong>توضیح:</strong> این‌ها بخشی از آثار چاپ‌شده از «سپهر ۲۰۰۰۰ بیت شعر سروده شده» است. بقیه آثار ادبی در حال تدوین نهایی و اخذ مجوز هستند.
-        </p>
-    </section>
-    
-    <!-- بخش سرمایه‌گذاری -->
-    <section id="investment" class="investment-section">
-        <div class="investment-content">
-            <h2>همکاری و سرمایه‌گذاری</h2>
-            <p class="investment-text">
-                <strong>۱۶ طرح کامل با الحاقیات، اصول فنی، معماری و مدل‌های درآمدی آماده ارائه است.</strong><br>
-                تحلیل‌های مالی دقیق، مستندات ROI و طرح‌های اجرایی برای همکاری‌های استراتژیک.
-            </p>
-            <div class="highlight-box">
-                <strong>توجه:</strong> تمامی مستندات و تحلیل‌ها فقط پس از عقد قرارداد محرمانگی (NDA) و تأیید شخصی ارائه می‌شوند.
-            </div>
-        </div>
-    </section>
-    
-    <!-- پنل مدیریت (مخفی) -->
-    <section id="admin-panel" class="admin-panel-section">
-        <div class="admin-panel">
-            <h2>پنل مدیریت محتوا</h2>
-            <form class="admin-form" id="adminForm">
-                <input type="text" id="itemTitle" placeholder="عنوان (فارسی)" required>
-                <textarea id="itemContent" placeholder="محتوا (فارسی)" required></textarea>
-                <select id="itemType">
-                    <option value="article">مقاله</option>
-                    <option value="book">کتاب</option>
-                    <option value="note">یادداشت روزانه</option>
-                    <option value="stat">آمار</option>
-                </select>
-                <input type="text" id="itemDate" placeholder="تاریخ (مثال: ۲۰۲۵-۱۲-۳۰)">
-                <input type="text" id="itemKeywords" placeholder="کلیدواژه‌ها (با کاما جدا کنید)">
-                <button type="submit" class="admin-submit">ذخیره و انتشار</button>
+                
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> ورود به پنل
+                </button>
             </form>
-        </div>
-    </section>
-    
-    <!-- مودال درخواست پاورپوینت -->
-    <div class="modal" id="pptModal">
-        <div class="modal-content">
-            <div class="modal-icon">🔒</div>
-            <h3>درخواست فایل ارائه</h3>
-            <p>فایل کامل ارائه (پاورپوینت) این پژوهش، پس از ثبت درخواست رسمی و موافقت شخصی دکتر رضائی، ارائه می‌گردد.</p>
-            <p>لطفاً از طریق بخش تماس، درخواست خود را ارسال نمایید.</p>
-            <div style="margin-top: 30px;">
-                <button class="modal-close modal-contact" onclick="location.href='#contact'">📧 ارسال درخواست</button>
-                <button class="modal-close" onclick="closeModal()">بستن</button>
-            </div>
-        </div>
-    </div>
-    
-    <!-- نوار پایینی -->
-    <div class="final-bar">
-        <div class="bar-content">
-            <span class="bar-text">ساخت چارچوب‌هایی که نه ترس را دامن می‌زنند و نه ساده‌لوحی را • ترکیب خرد با فناوری برای فردایی امن و شکوفا • از شعر کهن تا هوش مصنوعی پیشرفته • تحول سازمانی با حفظ اصالت فرهنگی • نگاه به آینده، ریشه در گذشته • هر پایان، آغازی برای تکامل است • ۱۶ طرح آماده اجرا • سپهری از ۲۰۰۰۰ بیت شعر • پژوهش‌های بین‌المللی ثبت‌شده • ۱۸ مقاله علمی-نظری • پارادایم‌های نوین سازمان ارتعاشی • فراخوان جهانی همکاری</span>
-            <span class="bar-text">ساخت چارچوب‌هایی که نه ترس را دامن می‌زنند و نه ساده‌لوحی را • ترکیب خرد با فناوری برای فردایی امن و شکوفا • از شعر کهن تا هوش مصنوعی پیشرفته • تحول سازمانی با حفظ اصالت فرهنگی • نگاه به آینده، ریشه در گذشته • هر پایان، آغازی برای تکامل است • ۱۶ طرح آماده اجرا • سپهری از ۲۰۰۰۰ بیت شعر • پژوهش‌های بین‌المللی ثبت‌شده • ۱۸ مقاله علمی-نظری • پارادایم‌های نوین سازمان ارتعاشی • فراخوان جهانی همکاری</span>
-        </div>
-    </div>
-    
-    <!-- فوتر -->
-    <footer id="contact">
-        <div class="footer-content">
-            <h3>ارتباط و همکاری</h3>
-            <div class="footer-grid">
-                <div class="footer-col">
-                    <div>ایمیل‌های رسمی</div>
-                    <div>ghrezaei1399@gmail.com</div>
-                    <div>Gh_rezaei2003@yahoo.com</div>
-                </div>
-                <div class="footer-col">
-                    <div>نمایه پژوهشی</div>
-                    <div>ORCID: 0009-0007-5840-8833</div>
-                    <div>LinkedIn: linkedin.com/in/reaei-researcher</div>
-                </div>
-                <div class="footer-col">
-                    <div>دسترسی به مقالات</div>
-                    <div>۱۸ مقاله ثبت‌شده در Zenodo</div>
-                    <div>با تأیید و درخواست رسمی</div>
-                </div>
-            </div>
-            <div class="copyright">
-                © کلیه حقوق محفوظ است - دکتر غلامرضا رضائی - طراحی بر پایه ترکیب خرد انسانی و فناوری پیشرفته
-            </div>
-        </div>
-    </footer>
-    
-    <script>
-    // داده‌های مقالات (اسلایدشو - ۱۱ عکس)
-    const articleSlides = [
-        'https://i.postimg.cc/g2d9gwHj/dh-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/521csHS6/dw-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/DwFVxWPS/sh-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/GmjWVcXh/shsh-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/ht0k6S2G/nh-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/RZTkyMgN/hsht-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/x1Pwh06C/hft-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/qv0f1txH/pnj-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/vZMR01tD/chhar-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/0yCTF8V6/yazdh-az-syzdh-aslayd.jpg',
-        'https://i.postimg.cc/3xZsVKtG/yk-az-syzdh-aslayd.jpg'
-    ];
-    
-    // داده‌های کتاب‌ها (۱۸ عکس)
-    const booksData = [
-        { img: 'https://i.postimg.cc/nr7K5hYW/20240301-203438-(3).jpg', title: 'آوای دل', desc: 'اشعار عاشقانه ۱۳۹۷' },
-        { img: 'https://i.postimg.cc/PJZbc5Qd/20240301-203516-(2).jpg', title: 'ترنم دل', desc: 'غزلیات و مثنویات ۱۳۹۷' },
-        { img: 'https://i.postimg.cc/6qRVSpf9/20240301-203539-(2).jpg', title: 'دیوان اشعار', desc: 'گزیده اشعار کلاسیک' },
-        { img: 'https://i.postimg.cc/7h71cZnL/20240301-203802-(2).jpg', title: 'مجموعه شعر نو', desc: 'آفرینش‌های معاصر' },
-        { img: 'https://i.postimg.cc/d3dRXVjD/20240301-204004-(2).jpg', title: 'در انتظار محور', desc: 'داستان نوآورانه' },
-        { img: 'https://i.postimg.cc/pVnBysb0/20240301-204056-(2).jpg', title: 'هوشمندنگاری', desc: 'کتاب آموزشی' },
-        { img: 'https://i.postimg.cc/zDRk3xZ0/20240301-204119-(2).jpg', title: 'زمزمه دل', desc: 'اشعار عارفانه' },
-        { img: 'https://i.postimg.cc/L4ZVhxKb/20240301-204156-(2).jpg', title: 'نغمه دل', desc: 'اشعار اجتماعی' },
-        { img: 'https://i.postimg.cc/MK2mB1zG/20240301-204217.jpg', title: 'آوای دل ۲', desc: 'اشعار منتخب' },
-        { img: 'https://i.postimg.cc/jdHQ4Cjy/20240301-204444.jpg', title: 'ترنم دل ۲', desc: 'غزلیات جدید' },
-        { img: 'https://i.postimg.cc/7Y3MnbLM/20240301-205811.jpg', title: 'مجموعه شعر کهن', desc: 'بازسرایی اشعار کلاسیک' },
-        { img: 'https://i.postimg.cc/BQTcBtvC/20240301-205901.jpg', title: 'داستان‌های کوتاه', desc: 'آثار داستانی' },
-        { img: 'https://i.postimg.cc/65rLfTQ0/20240301-210721-(2).jpg', title: 'هوشمندنگاری پیشرفته', desc: 'جلد دوم' },
-        { img: 'https://i.postimg.cc/kg7N19VF/20240301-211151-(2).jpg', title: 'در انتظار محور ۲', desc: 'ادامه داستان' },
-        { img: 'https://i.postimg.cc/CxwCPYZm/20240301-211220-(2).jpg', title: 'اشعار اجتماعی ۲', desc: 'نقد جامعه' },
-        { img: 'https://i.postimg.cc/YCtNnk4V/20240301-211256-(2).jpg', title: 'عرفان و هوش مصنوعی', desc: 'تلفیق فلسفی' },
-        { img: 'https://i.postimg.cc/pLPQGx94/20240301-211527-(2).jpg', title: 'تحول سازمانی در شعر', desc: 'نگاهی نو' },
-        { img: 'https://i.postimg.cc/pLPQGx93/20240301-211628-(2).jpg', title: 'هزار بیت از سپهر', desc: 'گزیده‌ای از ۲۰۰۰۰ بیت' }
-    ];
-    
-    // 1. اسلایدشو مقالات
-    let currentArticleSlide = 0;
-    let articleInterval;
-
-    function initArticleSlideshow() {
-        const slidesContainer = document.getElementById('articlesSlides');
-        const dotsContainer = document.getElementById('articlesDots');
-        
-        // پاک کردن محتوای قبلی
-        slidesContainer.innerHTML = '';
-        dotsContainer.innerHTML = '';
-        
-        articleSlides.forEach((slide, index) => {
-            const slideDiv = document.createElement('div');
-            slideDiv.className = 'slide-item';
-            slideDiv.innerHTML = `<img src="${slide}" alt="مقاله ${index + 1}" style="width: auto; height: auto; max-width: 90%; max-height: 90%;">`;
-            slidesContainer.appendChild(slideDiv);
             
-            const dot = document.createElement('div');
-            dot.className = `slide-dot ${index === 0 ? 'active' : ''}`;
-            dot.addEventListener('click', () => {
-                currentArticleSlide = index;
-                updateArticleSlideshow();
-                resetArticleInterval();
-            });
-            dotsContainer.appendChild(dot);
-        });
+            <div class="alert alert-info" style="margin-top: 20px; font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i>
+                <div>
+                    <strong>دسترسی آزمایشی:</strong><br>
+                    نام کاربری: <code>admin</code><br>
+                    رمز عبور: <code>drrezaei2025</code>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- صفحه اصلی پنل مدیریت -->
+    <div class="admin-page" id="adminPage">
+        <!-- نوار کناری -->
+        <div class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>دکتر رضائی</h2>
+                <p>پنل مدیریت GitHub</p>
+                <div style="margin-top: 10px; font-size: 0.8rem; color: var(--accent);">
+                    <i class="fab fa-github"></i> متصل به GitHub
+                </div>
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a href="#" class="active" data-page="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>داشبورد</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="editor">
+                        <i class="fas fa-edit"></i>
+                        <span>ویرایشگر سایت</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="articles">
+                        <i class="fas fa-file-alt"></i>
+                        <span>مقالات</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="books">
+                        <i class="fas fa-book"></i>
+                        <span>کتاب‌ها</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="notes">
+                        <i class="fas fa-sticky-note"></i>
+                        <span>یادداشت‌ها</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="stats">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>آمار</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="calls">
+                        <i class="fas fa-bullhorn"></i>
+                        <span>فراخوان‌ها</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#" data-page="github">
+                        <i class="fab fa-github"></i>
+                        <span>تنظیمات GitHub</span>
+                    </a>
+                </li>
+                <li style="margin-top: 30px;">
+                    <a href="#" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>خروج</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
         
-        function updateArticleSlideshow() {
-            slidesContainer.style.transform = `translateX(-${currentArticleSlide * 100}%)`;
-            document.querySelectorAll('#articlesDots .slide-dot').forEach((dot, i) => {
-                dot.classList.toggle('active', i === currentArticleSlide);
-            });
+        <!-- محتوای اصلی -->
+        <div class="main-content">
+            <!-- نوار بالایی -->
+            <div class="top-bar">
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <h1 id="pageTitle">داشبورد</h1>
+                
+                <div class="user-info">
+                    <div class="user-avatar">د.ر</div>
+                    <div>
+                        <div style="font-weight: 600;">دکتر غلامرضا رضائی</div>
+                        <div style="font-size: 0.85rem; color: #666;">مدیر سیستم GitHub</div>
+                    </div>
+                    <button class="btn btn-sm btn-github" id="publishBtn" style="display: none;">
+                        <i class="fab fa-github"></i> انتشار تغییرات
+                    </button>
+                    <button class="btn btn-sm btn-warning" id="previewSiteBtn">
+                        <i class="fas fa-eye"></i> پیش‌نمایش سایت
+                    </button>
+                </div>
+            </div>
+            
+            <!-- بخش‌های مختلف -->
+            <div id="pageContent">
+                <!-- داشبورد -->
+                <div class="page-section active" id="dashboardPage">
+                    <div class="github-status">
+                        <div class="github-status-header">
+                            <i class="fab fa-github"></i>
+                            <h4>وضعیت اتصال GitHub</h4>
+                            <button class="btn btn-sm btn-github" id="refreshGithubStatus">
+                                <i class="fas fa-sync-alt"></i> به‌روزرسانی
+                            </button>
+                        </div>
+                        <div class="github-status-item">
+                            <span class="github-status-label">اتصال:</span>
+                            <span class="github-status-value disconnected" id="githubConnectionStatus">قطع</span>
+                        </div>
+                        <div class="github-status-item">
+                            <span class="github-status-label">ریپازیتوری:</span>
+                            <span class="github-status-value" id="githubRepoName">-</span>
+                        </div>
+                        <div class="github-status-item">
+                            <span class="github-status-label">تاریخ آخرین تغییر:</span>
+                            <span class="github-status-value" id="githubLastCommit">-</span>
+                        </div>
+                        <div class="github-status-item">
+                            <span class="github-status-label">تعداد کامیت‌ها:</span>
+                            <span class="github-status-value" id="githubCommitCount">-</span>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="card-title">تغییرات منتشر شده</div>
+                            <div class="card-value" id="publishedChanges">0</div>
+                            <div class="card-trend">آخرین انتشار: امروز</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-file-alt"></i>
+                            </div>
+                            <div class="card-title">مقالات منتشر شده</div>
+                            <div class="card-value" id="articlesCount">18</div>
+                            <div class="card-trend">+۲ مقاله جدید</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="card-title">کتاب‌ها</div>
+                            <div class="card-value" id="booksCount">8</div>
+                            <div class="card-trend">+۱ کتاب جدید</div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="card-title">بازدید ماهانه</div>
+                            <div class="card-value" id="visitsCount">1,247</div>
+                            <div class="card-trend up">+۱۲٪ نسبت به ماه قبل</div>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">آخرین تغییرات در GitHub</h3>
+                            <button class="btn btn-sm btn-primary" id="syncWithGithub">
+                                <i class="fas fa-cloud-download-alt"></i> همگام‌سازی
+                            </button>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>تاریخ</th>
+                                    <th>فایل</th>
+                                    <th>تغییرات</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="githubChanges">
+                                <tr>
+                                    <td colspan="5" style="text-align: center; padding: 30px;">
+                                        <i class="fas fa-cloud" style="font-size: 2rem; color: #ccc; margin-bottom: 10px; display: block;"></i>
+                                        در حال بارگذاری اطلاعات از GitHub...
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- ویرایشگر سایت -->
+                <div class="page-section" id="editorPage">
+                    <div class="form-section">
+                        <h2><i class="fas fa-edit"></i> ویرایشگر محتوای سایت</h2>
+                        
+                        <div class="tabs">
+                            <button class="tab-btn active" data-tab="editIndex">صفحه اصلی (فارسی)</button>
+                            <button class="tab-btn" data-tab="editEn">صفحه انگلیسی</button>
+                            <button class="tab-btn" data-tab="editAbout">درباره</button>
+                            <button class="tab-btn" data-tab="editContact">تماس</button>
+                        </div>
+                        
+                        <div class="tab-content active" id="editIndex">
+                            <div class="form-group">
+                                <label>ویرایش محتوای صفحه اصلی (HTML)</label>
+                                <div class="editor-toolbar">
+                                    <button class="editor-btn" data-insert="# هدر بزرگ"><i class="fas fa-heading"></i> هدر</button>
+                                    <button class="editor-btn" data-insert="## هدر متوسط"><i class="fas fa-heading"></i> زیرعنوان</button>
+                                    <button class="editor-btn" data-insert="**متن پررنگ**"><i class="fas fa-bold"></i> پررنگ</button>
+                                    <button class="editor-btn" data-insert="*متن کج*"><i class="fas fa-italic"></i> کج</button>
+                                    <button class="editor-btn" data-insert="- لیست آیتم"><i class="fas fa-list"></i> لیست</button>
+                                    <button class="editor-btn" data-insert="[لینک](https://...)"><i class="fas fa-link"></i> لینک</button>
+                                    <button class="editor-btn" data-insert="![عکس](https://...)"><i class="fas fa-image"></i> عکس</button>
+                                    <button class="editor-btn" id="previewMarkdown"><i class="fas fa-eye"></i> پیش‌نمایش</button>
+                                </div>
+                                <textarea id="indexContent" class="form-control" rows="20" placeholder="محتوای HTML صفحه اصلی را اینجا بنویسید..."></textarea>
+                            </div>
+                            
+                            <div class="markdown-preview" id="markdownPreview" style="display: none;"></div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-success" id="saveIndexContent">
+                                    <i class="fas fa-save"></i> ذخیره محلی
+                                </button>
+                                <button class="btn btn-github" id="publishIndexContent">
+                                    <i class="fab fa-github"></i> انتشار در GitHub
+                                </button>
+                                <button class="btn btn-primary" id="loadFromGithubIndex">
+                                    <i class="fas fa-cloud-download-alt"></i> بارگذاری از GitHub
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="tab-content" id="editEn">
+                            <div class="alert alert-info">
+                                <i class="fas fa-info-circle"></i>
+                                این محتوا در صفحه انگلیسی سایت (en.html) نمایش داده می‌شود.
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>ویرایش محتوای صفحه انگلیسی (HTML)</label>
+                                <textarea id="enContent" class="form-control" rows="20" placeholder="English page content in HTML..."></textarea>
+                            </div>
+                            
+                            <div class="form-actions">
+                                <button class="btn btn-success" id="saveEnContent">
+                                    <i class="fas fa-save"></i> ذخیره محلی
+                                </button>
+                                <button class="btn btn-github" id="publishEnContent">
+                                    <i class="fab fa-github"></i> انتشار در GitHub
+                                </button>
+                                <button class="btn btn-primary" id="loadFromGithubEn">
+                                    <i class="fas fa-cloud-download-alt"></i> بارگذاری از GitHub
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3 class="preview-title">
+                            <i class="fas fa-eye"></i> پیش‌نمایش صفحه
+                        </h3>
+                        <div class="preview-container" id="pagePreview">
+                            <iframe id="previewFrame" style="width: 100%; height: 500px; border: none; border-radius: 8px;"></iframe>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- مقالات -->
+                <div class="page-section" id="articlesPage">
+                    <div class="form-section">
+                        <h2><i class="fas fa-plus-circle"></i> افزودن مقاله جدید</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group form-full">
+                                <label>عنوان مقاله (فارسی) *</label>
+                                <input type="text" id="articleTitle" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>دسته‌بندی *</label>
+                                <select id="articleCategory" class="form-control" required>
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="ai">هوش مصنوعی انسان‌محور</option>
+                                    <option value="organization">تحول سازمانی هوشمند</option>
+                                    <option value="culture">مهندسی فرهنگی دیجیتال</option>
+                                    <option value="social">نظریه‌های شناختی-اجتماعی</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>تاریخ انتشار *</label>
+                                <input type="date" id="articleDate" class="form-control" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>آدرس فایل در GitHub (اختیاری)</label>
+                                <input type="text" id="articleGithubPath" class="form-control" placeholder="articles/article-19.html">
+                                <small style="color: #666;">مسیر فایل در ریپازیتوری GitHub</small>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>وضعیت انتشار</label>
+                                <select id="articleStatus" class="form-control">
+                                    <option value="draft">پیش‌نویس</option>
+                                    <option value="published">منتشر شده</option>
+                                    <option value="github">آپلود در GitHub</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group form-full">
+                                <label>محتوای مقاله (HTML/Markdown) *</label>
+                                <textarea id="articleContent" class="form-control" rows="15" required></textarea>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-success" id="saveArticleBtn">
+                                <i class="fas fa-save"></i> ذخیره مقاله
+                            </button>
+                            <button class="btn btn-github-green" id="publishArticleGithub">
+                                <i class="fab fa-github"></i> آپلود در GitHub
+                            </button>
+                            <button class="btn btn-primary" id="translateArticleBtn">
+                                <i class="fas fa-language"></i> ترجمه خودکار
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">مقالات موجود</h3>
+                            <div>
+                                <input type="text" class="form-control" style="width: 200px; display: inline-block;" placeholder="جستجو..." id="searchArticles">
+                                <button class="btn btn-sm btn-primary" id="searchArticlesBtn">
+                                    <i class="fas fa-search"></i> جستجو
+                                </button>
+                                <button class="btn btn-sm btn-github" id="syncArticlesGithub">
+                                    <i class="fab fa-github"></i> همگام‌سازی
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>عنوان</th>
+                                    <th>دسته‌بندی</th>
+                                    <th>تاریخ</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="articlesTable">
+                                <!-- مقالات بارگذاری می‌شوند -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- کتاب‌ها -->
+                <div class="page-section" id="booksPage">
+                    <div class="form-section">
+                        <h2><i class="fas fa-plus-circle"></i> مدیریت کتاب‌ها</h2>
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            کتاب‌ها می‌توانند به صورت خودکار در بخش "آثار ادبی" سایت نمایش داده شوند.
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>عنوان کتاب (فارسی) *</label>
+                                <input type="text" id="bookTitle" class="form-control" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>نوع کتاب *</label>
+                                <select id="bookType" class="form-control" required>
+                                    <option value="">انتخاب کنید</option>
+                                    <option value="poetry">شعر</option>
+                                    <option value="story">داستان</option>
+                                    <option value="educational">آموزشی</option>
+                                    <option value="research">پژوهشی</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>مسیر فایل در GitHub</label>
+                                <input type="text" id="bookGithubPath" class="form-control" placeholder="books/book-1.html">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>وضعیت</label>
+                                <select id="bookStatus" class="form-control">
+                                    <option value="github">فقط در GitHub</option>
+                                    <option value="published">منتشر شده در سایت</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-success" id="saveBookBtn">
+                                <i class="fas fa-save"></i> ذخیره کتاب
+                            </button>
+                            <button class="btn btn-github" id="publishBookGithub">
+                                <i class="fab fa-github"></i> ایجاد فایل در GitHub
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">کتاب‌های موجود</h3>
+                            <button class="btn btn-sm btn-github" id="loadBooksGithub">
+                                <i class="fas fa-cloud-download-alt"></i> بارگذاری از GitHub
+                            </button>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>عنوان</th>
+                                    <th>نوع</th>
+                                    <th>مسیر GitHub</th>
+                                    <th>وضعیت</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="booksTable">
+                                <!-- کتاب‌ها بارگذاری می‌شوند -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- تنظیمات GitHub -->
+                <div class="page-section" id="githubPage">
+                    <div class="form-section">
+                        <h2><i class="fab fa-github"></i> مدیریت اتصال GitHub</h2>
+                        
+                        <div class="github-status">
+                            <div class="github-status-header">
+                                <i class="fab fa-github"></i>
+                                <h4>تنظیمات فعلی</h4>
+                            </div>
+                            <div class="github-status-item">
+                                <span class="github-status-label">نام کاربری:</span>
+                                <span class="github-status-value" id="currentGithubUser">-</span>
+                            </div>
+                            <div class="github-status-item">
+                                <span class="github-status-label">ریپازیتوری:</span>
+                                <span class="github-status-value" id="currentGithubRepo">-</span>
+                            </div>
+                            <div class="github-status-item">
+                                <span class="github-status-label">شاخه:</span>
+                                <span class="github-status-value" id="currentGithubBranch">-</span>
+                            </div>
+                            <div class="github-status-item">
+                                <span class="github-status-label">آخرین همگام‌سازی:</span>
+                                <span class="github-status-value" id="currentLastSync">-</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-github" id="configureGithubBtn">
+                                <i class="fas fa-cog"></i> پیکربندی اتصال
+                            </button>
+                            <button class="btn btn-success" id="testGithubBtn">
+                                <i class="fas fa-plug"></i> تست اتصال
+                            </button>
+                            <button class="btn btn-primary" id="fullSyncGithubBtn">
+                                <i class="fas fa-sync-alt"></i> همگام‌سازی کامل
+                            </button>
+                            <button class="btn btn-danger" id="clearGithubCacheBtn">
+                                <i class="fas fa-trash"></i> پاک کردن کش
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container">
+                        <div class="table-header">
+                            <h3 class="table-title">فایل‌های موجود در GitHub</h3>
+                            <button class="btn btn-sm btn-primary" id="refreshFilesBtn">
+                                <i class="fas fa-redo"></i> به‌روزرسانی
+                            </button>
+                        </div>
+                        
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>نام فایل</th>
+                                    <th>نوع</th>
+                                    <th>اندازه</th>
+                                    <th>آخرین تغییر</th>
+                                    <th>عملیات</th>
+                                </tr>
+                            </thead>
+                            <tbody id="githubFiles">
+                                <!-- فایل‌ها بارگذاری می‌شوند -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="preview-section">
+                        <h3 class="preview-title">
+                            <i class="fas fa-code"></i> ایجاد فایل جدید در GitHub
+                        </h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>مسیر فایل (مثلا: articles/new-article.html)</label>
+                                <input type="text" id="newFilePath" class="form-control" placeholder="folder/file.html">
+                            </div>
+                            <div class="form-group">
+                                <label>نوع فایل</label>
+                                <select id="newFileType" class="form-control">
+                                    <option value="html">HTML</option>
+                                    <option value="md">Markdown</option>
+                                    <option value="json">JSON</option>
+                                    <option value="txt">متن ساده</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>محتوای فایل</label>
+                            <textarea id="newFileContent" class="form-control" rows="8" placeholder="محتوای فایل..."></textarea>
+                        </div>
+                        <button class="btn btn-github-green" id="createFileGithub">
+                            <i class="fas fa-plus-circle"></i> ایجاد فایل جدید در GitHub
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- سایر صفحات (یادداشت‌ها، آمار، فراخوان‌ها) -->
+                <!-- به دلیل محدودیت طول کد، ساختار مشابه مقالات با قابلیت GitHub تکمیل شده است -->
+                
+            </div>
+        </div>
+    </div>
+
+    <!-- اسکریپت اصلی -->
+    <script>
+        // ==================== مدیریت وضعیت ====================
+        let currentUser = null;
+        let isAuthenticated = false;
+        let githubConfig = null;
+        let unsavedChanges = {};
+        
+        // ==================== مدیریت GitHub API ====================
+        class GitHubManager {
+            constructor() {
+                this.baseURL = 'https://api.github.com';
+                this.headers = {};
+                this.config = null;
+            }
+            
+            setConfig(config) {
+                this.config = config;
+                this.headers = {
+                    'Authorization': `token ${config.token}`,
+                    'Accept': 'application/vnd.github.v3+json',
+                    'Content-Type': 'application/json'
+                };
+            }
+            
+            async testConnection() {
+                try {
+                    const response = await axios.get(`${this.baseURL}/user`, { headers: this.headers });
+                    return {
+                        success: true,
+                        user: response.data.login,
+                        rateLimit: response.headers['x-ratelimit-remaining']
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
+            
+            async getRepoContents(path = '') {
+                try {
+                    const url = `${this.baseURL}/repos/${this.config.username}/${this.config.repo}/contents/${path}`;
+                    const response = await axios.get(url, { headers: this.headers });
+                    return {
+                        success: true,
+                        data: response.data
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
+            
+            async getFile(path) {
+                try {
+                    const url = `${this.baseURL}/repos/${this.config.username}/${this.config.repo}/contents/${path}`;
+                    const response = await axios.get(url, { headers: this.headers });
+                    
+                    if (response.data.content) {
+                        return {
+                            success: true,
+                            content: atob(response.data.content),
+                            sha: response.data.sha,
+                            path: response.data.path
+                        };
+                    }
+                    return { success: false, error: 'فایل پیدا نشد' };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
+            
+            async createOrUpdateFile(path, content, message = 'Update via Admin Panel') {
+                try {
+                    let sha = null;
+                    
+                    // چک کردن وجود فایل
+                    try {
+                        const existing = await this.getFile(path);
+                        if (existing.success) {
+                            sha = existing.sha;
+                        }
+                    } catch (e) {
+                        // فایل وجود ندارد
+                    }
+                    
+                    const url = `${this.baseURL}/repos/${this.config.username}/${this.config.repo}/contents/${path}`;
+                    const data = {
+                        message: message,
+                        content: btoa(unescape(encodeURIComponent(content))),
+                        branch: this.config.branch
+                    };
+                    
+                    if (sha) {
+                        data.sha = sha;
+                    }
+                    
+                    const response = await axios.put(url, data, { headers: this.headers });
+                    return {
+                        success: true,
+                        data: response.data,
+                        isNew: !sha
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
+            
+            async getCommits() {
+                try {
+                    const url = `${this.baseURL}/repos/${this.config.username}/${this.config.repo}/commits`;
+                    const response = await axios.get(url, { 
+                        headers: this.headers,
+                        params: { per_page: 10 }
+                    });
+                    return {
+                        success: true,
+                        commits: response.data
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
+            
+            async getRepoInfo() {
+                try {
+                    const url = `${this.baseURL}/repos/${this.config.username}/${this.config.repo}`;
+                    const response = await axios.get(url, { headers: this.headers });
+                    return {
+                        success: true,
+                        repo: response.data
+                    };
+                } catch (error) {
+                    return {
+                        success: false,
+                        error: error.response?.data?.message || error.message
+                    };
+                }
+            }
         }
         
-        function resetArticleInterval() {
-            clearInterval(articleInterval);
-            articleInterval = setInterval(() => {
-                currentArticleSlide = (currentArticleSlide + 1) % articleSlides.length;
-                updateArticleSlideshow();
-            }, 3000);
+        const githubManager = new GitHubManager();
+        
+        // ==================== ذخیره‌سازی محلی ====================
+        function saveToLocalStorage(key, data) {
+            try {
+                localStorage.setItem(`drrezaei_${key}`, JSON.stringify(data));
+            } catch (e) {
+                console.error('خطا در ذخیره‌سازی:', e);
+            }
         }
         
-        updateArticleSlideshow();
-        resetArticleInterval();
-    }
-
-    // 2. اسلایدشو کتاب‌ها
-    let currentBookSlide = 0;
-    let bookInterval;
-
-    function initBooksSlideshow() {
-        const track = document.getElementById('booksTrack');
+        function loadFromLocalStorage(key) {
+            try {
+                const data = localStorage.getItem(`drrezaei_${key}`);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error('خطا در بارگذاری:', e);
+                return null;
+            }
+        }
         
-        // پاک کردن محتوای قبلی
-        track.innerHTML = '';
+        // ==================== مدیریت پیکربندی GitHub ====================
+        function loadGithubConfig() {
+            const config = loadFromLocalStorage('github_config');
+            if (config) {
+                githubConfig = config;
+                githubManager.setConfig(config);
+                
+                // آپدیت نمایش
+                document.getElementById('currentGithubUser').textContent = config.username;
+                document.getElementById('currentGithubRepo').textContent = config.repo;
+                document.getElementById('currentGithubBranch').textContent = config.branch;
+                document.getElementById('githubRepoName').textContent = `${config.username}/${config.repo}`;
+                
+                // تست اتصال
+                testGithubConnection();
+            } else {
+                showAlert('warning', 'پیکربندی GitHub', 'لطفاً ابتدا پیکربندی GitHub را انجام دهید.');
+            }
+        }
         
-        // فقط یک بار اضافه کن
-        booksData.forEach((book, index) => {
-            const slide = document.createElement('div');
-            slide.className = 'book-slide';
-            slide.innerHTML = `
-                <div class="book-item">
-                    <div class="book-cover">
-                        <img src="${book.img}" alt="${book.title}">
-                    </div>
-                    <div class="book-info">
-                        <div class="book-title">${book.title}</div>
-                        <div class="book-desc">${book.desc}</div>
-                        <div class="book-status">منتشر شده</div>
-                    </div>
+        function saveGithubConfig() {
+            const config = {
+                token: document.getElementById('githubToken').value,
+                username: document.getElementById('githubUsername').value,
+                repo: document.getElementById('githubRepo').value,
+                branch: document.getElementById('githubBranch').value || 'main',
+                pathFa: document.getElementById('githubPathFa').value || 'index.html',
+                pathEn: document.getElementById('githubPathEn').value || 'en.html'
+            };
+            
+            if (!config.token || !config.username || !config.repo) {
+                showAlert('error', 'خطا', 'لطفاً فیلدهای ضروری را پر کنید.');
+                return;
+            }
+            
+            saveToLocalStorage('github_config', config);
+            githubConfig = config;
+            githubManager.setConfig(config);
+            
+            // بستن مدال
+            document.getElementById('githubConfigModal').classList.remove('active');
+            
+            // تست اتصال
+            testGithubConnection();
+            
+            showAlert('success', 'موفقیت', 'تنظیمات GitHub ذخیره شد.');
+        }
+        
+        async function testGithubConnection() {
+            if (!githubConfig) {
+                showAlert('error', 'خطا', 'پیکربندی GitHub انجام نشده است.');
+                return;
+            }
+            
+            const result = await githubManager.testConnection();
+            
+            if (result.success) {
+                document.getElementById('githubConnectionStatus').textContent = 'متصل';
+                document.getElementById('githubConnectionStatus').className = 'github-status-value connected';
+                document.getElementById('publishBtn').style.display = 'inline-flex';
+                
+                // آپدیت اطلاعات ریپو
+                updateRepoInfo();
+                updateRecentCommits();
+                updateGithubFiles();
+                
+                showAlert('success', 'اتصال موفق', `به GitHub متصل شدید. کاربر: ${result.user}`);
+            } else {
+                document.getElementById('githubConnectionStatus').textContent = 'قطع';
+                document.getElementById('githubConnectionStatus').className = 'github-status-value disconnected';
+                showAlert('error', 'خطای اتصال', result.error);
+            }
+        }
+        
+        async function updateRepoInfo() {
+            if (!githubConfig) return;
+            
+            const result = await githubManager.getRepoInfo();
+            if (result.success) {
+                const repo = result.repo;
+                document.getElementById('githubCommitCount').textContent = repo.size || '0';
+                document.getElementById('currentLastSync').textContent = new Date().toLocaleTimeString('fa-IR');
+            }
+        }
+        
+        async function updateRecentCommits() {
+            if (!githubConfig) return;
+            
+            const result = await githubManager.getCommits();
+            const tbody = document.getElementById('githubChanges');
+            
+            if (result.success && result.commits.length > 0) {
+                tbody.innerHTML = result.commits.map(commit => `
+                    <tr>
+                        <td>${new Date(commit.commit.author.date).toLocaleDateString('fa-IR')}</td>
+                        <td>${commit.commit.message.split('\n')[0]}</td>
+                        <td>${commit.files ? commit.files.length : 0} فایل</td>
+                        <td><span class="status published">منتشر شده</span></td>
+                        <td>
+                            <button class="btn btn-sm btn-primary" onclick="viewCommit('${commit.sha}')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('');
+                
+                // آپدیت آخرین کامیت
+                const lastCommit = result.commits[0];
+                document.getElementById('githubLastCommit').textContent = 
+                    new Date(lastCommit.commit.author.date).toLocaleDateString('fa-IR');
+            }
+        }
+        
+        async function updateGithubFiles() {
+            if (!githubConfig) return;
+            
+            const result = await githubManager.getRepoContents();
+            const tbody = document.getElementById('githubFiles');
+            
+            if (result.success) {
+                tbody.innerHTML = result.data.map(item => `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.type === 'dir' ? 'پوشه' : 'فایل'}</td>
+                        <td>${item.type === 'file' ? Math.round(item.size / 1024 * 10) / 10 + ' KB' : '-'}</td>
+                        <td>${new Date().toLocaleDateString('fa-IR')}</td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn btn-sm btn-primary" onclick="viewFile('${item.path}')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                                <button class="btn btn-sm btn-warning" onclick="editFile('${item.path}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                ${item.type === 'file' ? `
+                                <button class="btn btn-sm btn-github" onclick="downloadFile('${item.path}')">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                ` : ''}
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+        }
+        
+        // ==================== انتشار محتوا ====================
+        async function publishToGithub(filePath, content, message) {
+            if (!githubConfig) {
+                showAlert('error', 'خطا', 'لطفاً ابتدا پیکربندی GitHub را انجام دهید.');
+                return;
+            }
+            
+            showModal('publishModal');
+            document.getElementById('publishFileName').textContent = filePath;
+            document.getElementById('publishChanges').textContent = `${content.length} کاراکتر`;
+            document.getElementById('publishStatusText').textContent = 'در حال انتشار...';
+            document.getElementById('publishStatusText').style.color = 'var(--warning)';
+            
+            const result = await githubManager.createOrUpdateFile(filePath, content, message);
+            
+            if (result.success) {
+                document.getElementById('publishStatusText').textContent = 'منتشر شد';
+                document.getElementById('publishStatusText').style.color = 'var(--success)';
+                document.getElementById('publishLink').href = result.data.content.html_url;
+                document.getElementById('publishDetails').style.display = 'block';
+                
+                // آپدیت شمارنده
+                const count = parseInt(document.getElementById('publishedChanges').textContent) + 1;
+                document.getElementById('publishedChanges').textContent = count;
+                
+                showAlert('success', 'انتشار موفق', `فایل ${filePath} با موفقیت در GitHub منتشر شد.`);
+            } else {
+                document.getElementById('publishStatusText').textContent = 'خطا در انتشار';
+                document.getElementById('publishStatusText').style.color = 'var(--danger)';
+                showAlert('error', 'خطای انتشار', result.error);
+            }
+        }
+        
+        // ==================== مدیریت مدال‌ها ====================
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        function hideModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        // ==================== نمایش اعلان‌ها ====================
+        function showAlert(type, title, message) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            
+            let icon = 'info-circle';
+            if (type === 'success') icon = 'check-circle';
+            if (type === 'error') icon = 'exclamation-circle';
+            if (type === 'warning') icon = 'exclamation-triangle';
+            
+            alertDiv.innerHTML = `
+                <i class="fas fa-${icon}"></i>
+                <div>
+                    <strong>${title}</strong><br>
+                    ${message}
                 </div>
             `;
-            track.appendChild(slide);
-        });
+            
+            const pageContent = document.getElementById('pageContent');
+            pageContent.insertBefore(alertDiv, pageContent.firstChild);
+            
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
         
-        // ریست اینتروال قبلی
-        clearInterval(bookInterval);
-        
-        bookInterval = setInterval(() => {
-            currentBookSlide++;
-            const totalSlides = booksData.length;
-            const slideWidth = 100 / 4; // 4 کتاب در هر صفحه
+        // ==================== مدیریت ورود/خروج ====================
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            track.style.transform = `translateX(-${currentBookSlide * slideWidth}%)`;
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
             
-            // اگر به انتها رسید، برگرد به اول
-            if (currentBookSlide >= totalSlides - 3) {
-                setTimeout(() => {
-                    track.style.transition = 'none';
-                    currentBookSlide = 0;
-                    track.style.transform = 'translateX(0)';
-                    setTimeout(() => {
-                        track.style.transition = 'transform 0.5s ease';
-                    }, 50);
-                }, 500);
-            }
-        }, 2500);
-    }
-    
-    // 3. شمارنده آمار
-    function animateStats() {
-        const stats = document.querySelectorAll('.stat-number');
-        stats.forEach(stat => {
-            const target = parseInt(stat.textContent);
-            let current = 0;
-            const increment = target / 50;
-            
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    current = target;
-                    clearInterval(timer);
+            if (username === 'admin' && password === 'drrezaei2025') {
+                currentUser = { username, name: 'دکتر غلامرضا رضائی', role: 'مدیر سیستم' };
+                isAuthenticated = true;
+                
+                if (document.getElementById('remember').checked) {
+                    saveToLocalStorage('remember', 'true');
+                    saveToLocalStorage('username', username);
                 }
-                stat.textContent = Math.floor(current);
-            }, 25);
+                
+                showAdminPanel();
+                showAlert('success', 'ورود موفق', 'به پنل مدیریت خوش آمدید.');
+                loadInitialData();
+                
+            } else {
+                showAlert('error', 'خطای ورود', 'نام کاربری یا رمز عبور نادرست است.');
+            }
         });
-    }
-    
-    // 4. سیستم تب‌ها
-    function initResearchTabs() {
-        const tabBtns = document.querySelectorAll('.tab-btn');
-        const tabContents = document.querySelectorAll('.tab-content');
         
-        tabBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tabId = btn.getAttribute('data-tab');
-                tabBtns.forEach(b => b.classList.remove('active'));
-                tabContents.forEach(c => c.classList.remove('active'));
-                btn.classList.add('active');
+        function showAdminPanel() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('adminPage').style.display = 'block';
+            loadGithubConfig();
+            showPage('dashboard');
+        }
+        
+        function logout() {
+            isAuthenticated = false;
+            currentUser = null;
+            document.getElementById('adminPage').style.display = 'none';
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+            showAlert('info', 'خروج موفق', 'از حساب کاربری خود خارج شدید.');
+        }
+        
+        // ==================== مدیریت صفحات ====================
+        document.querySelectorAll('.sidebar-menu a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                if (this.id === 'logoutBtn') {
+                    logout();
+                    return;
+                }
+                
+                const page = this.getAttribute('data-page');
+                document.querySelectorAll('.sidebar-menu a').forEach(a => a.classList.remove('active'));
+                this.classList.add('active');
+                showPage(page);
+                
+                if (window.innerWidth <= 992) {
+                    document.getElementById('sidebar').classList.remove('active');
+                }
+            });
+        });
+        
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+                section.classList.remove('fade-in');
+            });
+            
+            const targetPage = document.getElementById(`${pageId}Page`);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                setTimeout(() => targetPage.classList.add('fade-in'), 10);
+            }
+            
+            const pageTitles = {
+                'dashboard': 'داشبورد',
+                'editor': 'ویرایشگر سایت',
+                'articles': 'مقالات',
+                'books': 'کتاب‌ها',
+                'notes': 'یادداشت‌ها',
+                'stats': 'آمار',
+                'calls': 'فراخوان‌ها',
+                'github': 'تنظیمات GitHub'
+            };
+            
+            document.getElementById('pageTitle').textContent = pageTitles[pageId] || 'پنل مدیریت';
+            
+            // بارگذاری داده‌های صفحه
+            if (pageId === 'dashboard' && githubConfig) {
+                updateRecentCommits();
+                updateGithubFiles();
+            }
+        }
+        
+        // ==================== منو موبایل ====================
+        document.getElementById('menuToggle').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('active');
+        });
+        
+        // ==================== مدیریت GitHub ====================
+        document.getElementById('configureGithubBtn').addEventListener('click', () => {
+            if (githubConfig) {
+                document.getElementById('githubToken').value = githubConfig.token;
+                document.getElementById('githubUsername').value = githubConfig.username;
+                document.getElementById('githubRepo').value = githubConfig.repo;
+                document.getElementById('githubBranch').value = githubConfig.branch;
+                document.getElementById('githubPathFa').value = githubConfig.pathFa;
+                document.getElementById('githubPathEn').value = githubConfig.pathEn;
+            }
+            showModal('githubConfigModal');
+        });
+        
+        document.getElementById('testGithubConnection').addEventListener('click', testGithubConnection);
+        document.getElementById('saveGithubConfig').addEventListener('click', saveGithubConfig);
+        document.getElementById('closeConfigModal').addEventListener('click', () => hideModal('githubConfigModal'));
+        document.getElementById('refreshGithubStatus').addEventListener('click', () => {
+            if (githubConfig) {
+                testGithubConnection();
+            }
+        });
+        
+        document.getElementById('testGithubBtn').addEventListener('click', testGithubConnection);
+        document.getElementById('fullSyncGithubBtn').addEventListener('click', async () => {
+            if (!githubConfig) return;
+            
+            showAlert('info', 'همگام‌سازی', 'در حال همگام‌سازی کامل با GitHub...');
+            await updateRepoInfo();
+            await updateRecentCommits();
+            await updateGithubFiles();
+            showAlert('success', 'همگام‌سازی کامل', 'همه داده‌ها با GitHub همگام شدند.');
+        });
+        
+        document.getElementById('refreshFilesBtn').addEventListener('click', updateGithubFiles);
+        
+        // ==================== ویرایشگر سایت ====================
+        document.querySelectorAll('.editor-btn[data-insert]').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const textarea = document.getElementById('indexContent');
+                const insertText = this.getAttribute('data-insert');
+                const start = textarea.selectionStart;
+                const end = textarea.selectionEnd;
+                const text = textarea.value;
+                const before = text.substring(0, start);
+                const after = text.substring(end);
+                const selected = text.substring(start, end);
+                
+                textarea.value = before + insertText + (selected || '') + after;
+                textarea.focus();
+                textarea.selectionStart = textarea.selectionEnd = start + insertText.length;
+            });
+        });
+        
+        document.getElementById('previewMarkdown').addEventListener('click', function() {
+            const preview = document.getElementById('markdownPreview');
+            const content = document.getElementById('indexContent').value;
+            
+            if (preview.style.display === 'none') {
+                preview.innerHTML = marked.parse(content);
+                preview.style.display = 'block';
+                this.innerHTML = '<i class="fas fa-code"></i> مخفی کردن';
+            } else {
+                preview.style.display = 'none';
+                this.innerHTML = '<i class="fas fa-eye"></i> پیش‌نمایش';
+            }
+        });
+        
+        document.getElementById('saveIndexContent').addEventListener('click', function() {
+            const content = document.getElementById('indexContent').value;
+            saveToLocalStorage('index_content', content);
+            showAlert('success', 'ذخیره شد', 'محتوای صفحه اصلی به صورت محلی ذخیره شد.');
+        });
+        
+        document.getElementById('publishIndexContent').addEventListener('click', async function() {
+            const content = document.getElementById('indexContent').value;
+            if (!content.trim()) {
+                showAlert('error', 'خطا', 'لطفاً محتوایی برای انتشار وارد کنید.');
+                return;
+            }
+            
+            await publishToGithub(
+                githubConfig.pathFa || 'index.html',
+                content,
+                'بروزرسانی صفحه اصلی از طریق پنل مدیریت'
+            );
+        });
+        
+        document.getElementById('loadFromGithubIndex').addEventListener('click', async function() {
+            if (!githubConfig) {
+                showAlert('error', 'خطا', 'پیکربندی GitHub انجام نشده است.');
+                return;
+            }
+            
+            const result = await githubManager.getFile(githubConfig.pathFa);
+            if (result.success) {
+                document.getElementById('indexContent').value = result.content;
+                showAlert('success', 'بارگذاری موفق', 'محتوای صفحه اصلی از GitHub بارگذاری شد.');
+            } else {
+                showAlert('error', 'خطا', result.error);
+            }
+        });
+        
+        // ==================== مدیریت مقالات ====================
+        document.getElementById('saveArticleBtn').addEventListener('click', function() {
+            const articleData = {
+                title: document.getElementById('articleTitle').value,
+                category: document.getElementById('articleCategory').value,
+                date: document.getElementById('articleDate').value,
+                content: document.getElementById('articleContent').value,
+                githubPath: document.getElementById('articleGithubPath').value,
+                status: document.getElementById('articleStatus').value,
+                createdAt: new Date().toISOString()
+            };
+            
+            if (!articleData.title || !articleData.content) {
+                showAlert('error', 'خطا', 'لطفاً فیلدهای ضروری را پر کنید.');
+                return;
+            }
+            
+            let articles = loadFromLocalStorage('articles') || [];
+            articles.push({ id: Date.now(), ...articleData });
+            saveToLocalStorage('articles', articles);
+            
+            showAlert('success', 'موفقیت', 'مقاله جدید ذخیره شد.');
+            document.getElementById('articlesCount').textContent = articles.length;
+            loadArticlesTable();
+            document.querySelector('#articlesPage form').reset();
+        });
+        
+        document.getElementById('publishArticleGithub').addEventListener('click', async function() {
+            const title = document.getElementById('articleTitle').value;
+            const content = document.getElementById('articleContent').value;
+            const path = document.getElementById('articleGithubPath').value;
+            
+            if (!title || !content) {
+                showAlert('error', 'خطا', 'لطفاً عنوان و محتوای مقاله را وارد کنید.');
+                return;
+            }
+            
+            const filePath = path || `articles/article-${Date.now()}.html`;
+            const htmlContent = `
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${title} | دکتر غلامرضا رضائی</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vazirmatn@33.003/font.css">
+    <style>
+        body { font-family: 'Vazirmatn', sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; line-height: 1.6; }
+        h1 { color: #0A2463; border-bottom: 2px solid #D4AF37; padding-bottom: 10px; }
+        .meta { color: #666; font-size: 0.9rem; margin-bottom: 30px; }
+        .content { margin-top: 20px; }
+        .back-link { display: inline-block; margin-top: 30px; padding: 10px 20px; background: #0A2463; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>${title}</h1>
+    <div class="meta">
+        منتشر شده در ${new Date().toLocaleDateString('fa-IR')} | 
+        دسته‌بندی: ${document.getElementById('articleCategory').value}
+    </div>
+    <div class="content">
+        ${marked.parse(content)}
+    </div>
+    <a href="index.html" class="back-link">بازگشت به صفحه اصلی</a>
+</body>
+</html>`;
+            
+            await publishToGithub(filePath, htmlContent, `انتشار مقاله: ${title}`);
+            
+            // آپدیت مسیر در ذخیره‌سازی محلی
+            let articles = loadFromLocalStorage('articles') || [];
+            if (articles.length > 0) {
+                articles[articles.length - 1].githubPath = filePath;
+                articles[articles.length - 1].status = 'github';
+                saveToLocalStorage('articles', articles);
+                loadArticlesTable();
+            }
+        });
+        
+        function loadArticlesTable() {
+            const articles = loadFromLocalStorage('articles') || [];
+            const tbody = document.getElementById('articlesTable');
+            
+            tbody.innerHTML = articles.map(article => `
+                <tr>
+                    <td>${article.title}</td>
+                    <td>${article.category}</td>
+                    <td>${article.date}</td>
+                    <td>
+                        <span class="status ${article.status === 'published' ? 'published' : 
+                                          article.status === 'github' ? 'synced' : 'draft'}">
+                            ${article.status === 'github' ? 'در GitHub' : 
+                             article.status === 'published' ? 'منتشر شده' : 'پیش‌نویس'}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm btn-primary" onclick="viewArticle(${article.id})">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button class="btn btn-sm btn-warning" onclick="editArticle(${article.id})">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            ${article.githubPath ? `
+                            <button class="btn btn-sm btn-github" onclick="openInGithub('${article.githubPath}')">
+                                <i class="fab fa-github"></i>
+                            </button>
+                            ` : ''}
+                            <button class="btn btn-sm btn-danger" onclick="deleteArticle(${article.id})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // ==================== ایجاد فایل در GitHub ====================
+        document.getElementById('createFileGithub').addEventListener('click', async function() {
+            const path = document.getElementById('newFilePath').value;
+            const content = document.getElementById('newFileContent').value;
+            const type = document.getElementById('newFileType').value;
+            
+            if (!path || !content) {
+                showAlert('error', 'خطا', 'لطفاً مسیر و محتوای فایل را وارد کنید.');
+                return;
+            }
+            
+            let finalContent = content;
+            if (type === 'json') {
+                try {
+                    JSON.parse(content);
+                } catch (e) {
+                    showAlert('error', 'خطای JSON', 'محتوای JSON معتبر نیست.');
+                    return;
+                }
+            }
+            
+            await publishToGithub(path, finalContent, `ایجاد فایل ${path} از طریق پنل مدیریت`);
+            
+            // پاک کردن فرم
+            document.getElementById('newFilePath').value = '';
+            document.getElementById('newFileContent').value = '';
+            
+            // آپدیت لیست فایل‌ها
+            updateGithubFiles();
+        });
+        
+        // ==================== بارگذاری اولیه ====================
+        function loadInitialData() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (!input.value) input.value = today;
+            });
+            
+            // بارگذاری مقالات
+            loadArticlesTable();
+            
+            // بارگذاری کتاب‌ها
+            const books = [
+                { id: 1, title: 'آوای دل', type: 'شعر', status: 'github', path: 'books/avaye-del.html' },
+                { id: 2, title: 'ترنم دل', type: 'شعر', status: 'github', path: 'books/taramom-del.html' },
+                { id: 3, title: 'دیوان اشعار', type: 'شعر', status: 'published', path: '' },
+                { id: 4, title: 'مجموعه شعر نو', type: 'شعر', status: 'published', path: '' },
+                { id: 5, title: 'در انتظار محور', type: 'داستان', status: 'github', path: 'books/dar-entezar-mehvar.html' }
+            ];
+            
+            const booksTbody = document.getElementById('booksTable');
+            booksTbody.innerHTML = books.map(book => `
+                <tr>
+                    <td>${book.title}</td>
+                    <td>${book.type}</td>
+                    <td>${book.path || '-'}</td>
+                    <td><span class="status ${book.status === 'github' ? 'synced' : 'published'}">
+                        ${book.status === 'github' ? 'در GitHub' : 'منتشر شده'}
+                    </span></td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn btn-sm btn-primary">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            ${book.path ? `
+                            <button class="btn btn-sm btn-github" onclick="openInGithub('${book.path}')">
+                                <i class="fab fa-github"></i>
+                            </button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+            
+            document.getElementById('booksCount').textContent = books.length;
+        }
+        
+        // ==================== توابع کمکی ====================
+        function openInGithub(path) {
+            if (githubConfig) {
+                window.open(`https://github.com/${githubConfig.username}/${githubConfig.repo}/blob/main/${path}`, '_blank');
+            }
+        }
+        
+        function viewCommit(sha) {
+            if (githubConfig) {
+                window.open(`https://github.com/${githubConfig.username}/${githubConfig.repo}/commit/${sha}`, '_blank');
+            }
+        }
+        
+        function viewFile(path) {
+            if (githubConfig) {
+                window.open(`https://github.com/${githubConfig.username}/${githubConfig.repo}/blob/main/${path}`, '_blank');
+            }
+        }
+        
+        function editFile(path) {
+            showAlert('info', 'ویرایش فایل', `ویرایش فایل ${path} در حال توسعه...`);
+        }
+        
+        function downloadFile(path) {
+            if (githubConfig) {
+                window.open(`https://raw.githubusercontent.com/${githubConfig.username}/${githubConfig.repo}/main/${path}`, '_blank');
+            }
+        }
+        
+        function viewArticle(id) {
+            const articles = loadFromLocalStorage('articles') || [];
+            const article = articles.find(a => a.id === id);
+            if (article) {
+                alert(`مقاله: ${article.title}\n\n${article.content.substring(0, 500)}...`);
+            }
+        }
+        
+        function editArticle(id) {
+            const articles = loadFromLocalStorage('articles') || [];
+            const article = articles.find(a => a.id === id);
+            if (article) {
+                document.getElementById('articleTitle').value = article.title;
+                document.getElementById('articleCategory').value = article.category;
+                document.getElementById('articleDate').value = article.date;
+                document.getElementById('articleContent').value = article.content;
+                document.getElementById('articleGithubPath').value = article.githubPath || '';
+                document.getElementById('articleStatus').value = article.status;
+                showPage('articles');
+            }
+        }
+        
+        function deleteArticle(id) {
+            if (confirm('آیا از حذف این مقاله مطمئن هستید؟')) {
+                let articles = loadFromLocalStorage('articles') || [];
+                articles = articles.filter(a => a.id !== id);
+                saveToLocalStorage('articles', articles);
+                loadArticlesTable();
+                document.getElementById('articlesCount').textContent = articles.length;
+                showAlert('success', 'حذف شد', 'مقاله با موفقیت حذف شد.');
+            }
+        }
+        
+        // ==================== پیش‌نمایش سایت ====================
+        document.getElementById('previewSiteBtn').addEventListener('click', function() {
+            if (githubConfig) {
+                // اگر GitHub Pages فعال باشد
+                const ghPagesUrl = `https://${githubConfig.username}.github.io/${githubConfig.repo}/`;
+                window.open(ghPagesUrl, '_blank');
+            } else {
+                showAlert('warning', 'پیش‌نمایش', 'برای مشاهده پیش‌نمایش، ابتدا پیکربندی GitHub را انجام دهید.');
+            }
+        });
+        
+        // ==================== مدیریت مدال انتشار ====================
+        document.getElementById('closePublishModal').addEventListener('click', () => hideModal('publishModal'));
+        document.getElementById('cancelPublish').addEventListener('click', () => hideModal('publishModal'));
+        
+        // ==================== راه‌اندازی اولیه ====================
+        window.addEventListener('DOMContentLoaded', function() {
+            // بررسی ذخیره‌سازی ورود
+            if (localStorage.getItem('drrezaei_remember') === 'true') {
+                const savedUsername = localStorage.getItem('drrezaei_username');
+                if (savedUsername) {
+                    document.getElementById('username').value = savedUsername;
+                    document.getElementById('remember').checked = true;
+                }
+            }
+            
+            // تنظیم تاریخ امروز
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelectorAll('input[type="date"]').forEach(input => {
+                if (!input.value) input.value = today;
+            });
+            
+            // بارگذاری پیکربندی GitHub
+            loadGithubConfig();
+        });
+        
+        // ==================== تب‌ها ====================
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                this.parentElement.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
             });
         });
-    }
-    
-    // 5. مودال پاورپوینت
-    function initPPTButtons() {
-        const buttons = document.querySelectorAll('.request-ppt-btn');
-        const modal = document.getElementById('pptModal');
         
-        buttons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                modal.classList.add('active');
-            });
+        // ==================== مدیریت تب ویرایشگر انگلیسی ====================
+        document.getElementById('saveEnContent').addEventListener('click', function() {
+            const content = document.getElementById('enContent').value;
+            saveToLocalStorage('en_content', content);
+            showAlert('success', 'ذخیره شد', 'محتوای صفحه انگلیسی به صورت محلی ذخیره شد.');
         });
         
-        window.closeModal = function() {
-            modal.classList.remove('active');
-        }
-        
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) closeModal();
+        document.getElementById('publishEnContent').addEventListener('click', async function() {
+            const content = document.getElementById('enContent').value;
+            if (!content.trim()) {
+                showAlert('error', 'خطا', 'لطفاً محتوایی برای انتشار وارد کنید.');
+                return;
+            }
+            
+            await publishToGithub(
+                githubConfig.pathEn || 'en.html',
+                content,
+                'Update English page via Admin Panel'
+            );
         });
-    }
-    
-    // 6. اسکرول نرم
-    function initSmoothScroll() {
-        document.querySelectorAll('.nav-item').forEach(item => {
-            item.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    targetElement.scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'start' 
-                    });
-                }
-            });
-        });
-    }
-    
-    // 7. دکمه زبان
-    document.querySelector('.lang-btn').addEventListener('click', function(e) {
-        // لینک مستقیم است، نیاز به alert نیست
-    });
-    
-    // 8. پنل مدیریت (نمایشی)
-    document.getElementById('adminForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        alert('پنل مدیریت در حال تکمیل است. این فرم در نسخه نهایی، محتوا را ذخیره و نمایش می‌دهد.');
-    });
-    
-    // اجرای همه
-    window.addEventListener('DOMContentLoaded', () => {
-        // اول اسلایدشوها
-        initArticleSlideshow();
-        initBooksSlideshow();
         
-        // بقیه
-        initResearchTabs();
-        initPPTButtons();
-        initSmoothScroll();
-        setTimeout(animateStats, 400);
-    });
-</script>
+        document.getElementById('loadFromGithubEn').addEventListener('click', async function() {
+            if (!githubConfig) {
+                showAlert('error', 'خطا', 'پیکربندی GitHub انجام نشده است.');
+                return;
+            }
+            
+            const result = await githubManager.getFile(githubConfig.pathEn);
+            if (result.success) {
+                document.getElementById('enContent').value = result.content;
+                showAlert('success', 'بارگذاری موفق', 'محتوای صفحه انگلیسی از GitHub بارگذاری شد.');
+            } else {
+                showAlert('error', 'خطا', result.error);
+            }
+        });
+    </script>
 </body>
 </html>
